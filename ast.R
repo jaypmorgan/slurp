@@ -9,9 +9,8 @@ ast <- function(ui) {
   }
 
   tokenize <- function(ui) {
-    tokens <- stringr::str_replace_all(ui, "\\(", "( ")
-    tokens <- stringr::str_replace_all(tokens, "\\)", " )")
-    tokens <- strsplit(tokens, " ")[[1]]
+    str_regex <- "(?:(\\(|\\))|([\"*+\\/\\w\\d-]+))"
+    tokens <- stringr::str_match_all(ui, str_regex)[[1]][,1]
     return(tokens)
   }
 
