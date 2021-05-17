@@ -15,4 +15,20 @@
 
 # "testing"
 # "testing" <- returns "testing" as well
+
+# create vectors with [ ]
+(mean [1 2 3 4 5])
+
+# [1] 3
 ```
+
+## Things to do:
+
+- [X] Lisp tokenisation
+- [X] Basic function application
+- [X] Vector notation
+- [ ] Nested function application
+- [ ] Function definitions
+- [ ] Variable assignments
+- [ ] Sets and Lists
+- [ ] Keyword arguments
