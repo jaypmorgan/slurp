@@ -9,7 +9,7 @@ ast <- function(ui) {
   }
 
   tokenize <- function(ui) {
-    str_regex <- "(?:(\\(|\\))|([\\[\\]#{}])|([\"*+\\w\\d\\/-]+))"
+    str_regex <- "(?:(\\(|\\))|([\\[\\]#{}])|(\".*?\")|([*+\\w\\d\\/-]+))"
     tokens <- stringr::str_match_all(ui, str_regex)[[1]][,1]
     return(tokens)
   }

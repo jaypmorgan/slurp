@@ -32,3 +32,5 @@
 - [ ] Variable assignments
 - [ ] Sets and Lists
 - [ ] Keyword arguments
+- [ ] Macros
+- [ ] Pre-installed macros such as threading
