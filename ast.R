@@ -9,15 +9,16 @@ ast <- function(ui) {
   }
 
   function_map <- list()
-  function_map[["+"]] <- function(...) { args <- prepare_args(...); paste(args[[1]], "+", args[[2]]) }
-  function_map[["-"]] <- function(...) { args <- prepare_args(...); paste(args[[1]], "-", args[[2]]) }
-  function_map[["*"]] <- function(...) { args <- prepare_args(...); paste(args[[1]], "*", args[[2]]) }
-  function_map[["/"]] <- function(...) { args <- prepare_args(...); paste(args[[1]], "/", args[[2]]) }
+  function_map[["+"]] <- function(a, b) { paste("(", a, "+", b, ")") }
+  function_map[["-"]] <- function(a, b) { paste("(", a, "-", b, ")") }
+  function_map[["*"]] <- function(a, b) { paste("(", a, "*", b, ")") }
+  function_map[["/"]] <- function(a, b) { paste("(", a, "/", b, ")") }
+  function_map[["^"]] <- function(a, b) { paste("(", a, "^", b, ")") }
   function_map[["defparam"]] <- function(...) {
     a <- prepare_args(...);
     e <- env_parents()[[2]]
     assign(a[[1]], str2lang(a[[2]]), envir = e)
-    return(str2lang(a[[2]]))
+    return(a[[2]])
   }
 
 
@@ -89,7 +90,11 @@ ast <- function(ui) {
     }
 
     if (func %in% names(function_map)) {
-      fun <- function_map[[func]](args)
+      if (!is_infix(func)) {
+        fun <- function_map[[func]](args)
+      } else {
+        fun <- function_map[[func]](args[[1]], args[[2]])
+      }
     } else {
       fun <- general_fun(func, args)
     }
@@ -97,11 +102,24 @@ ast <- function(ui) {
   }
 
   eval_function <- function(fun) {
+    print(fun)
     tryCatch({
         out <- eval(parse(text=fun))
+        return(out)
     },
     error=function(cond) {
-      message(paste0(cond, "\n"))
+      cat(paste(cond, "\n"))
+      return(NULL)
+    })
+  }
+
+  eval_variable <- function(v) {
+    tryCatch({
+        out <- eval(str2lang(v))
+        return(out)
+    },
+    error=function(cond) {
+      cat(paste(cond, "\n"))
       return(NULL)
     })
   }
@@ -147,16 +165,17 @@ ast <- function(ui) {
       args <- c(args, item)
     }
     o <- compile_function(c(fun, args))
-    o <- eval_function(o)
+    ## o <- eval_function(o)
     return(o)
   }
 
   if (tokens[[1]] == "(") {
     lst <- add_tokens(tokens)
     output <- run_ast(lst)
+    output <- eval_function(output)
   } else {
     ## is a variable
-    output <- eval_function(tokens)
+    output <- eval_variable(tokens)
   }
   return(output)
 }

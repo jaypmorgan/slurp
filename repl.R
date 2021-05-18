@@ -16,14 +16,18 @@ repl <- function() {
     ## }
     if (ui == "(exit)") {
       q("no")
-    } else {
+    } else if (ui != "") {
       out <- ast(ui)
+    } else {
+      out <- ""
     }
     return(out)
   }
 
   lprint <- function(output) {
-    print(output)
+    if (!is.null(output) && output != "") {
+      print(output)
+    }
   }
 
   lrep <- function() {}
