@@ -31,7 +31,7 @@ ast <- function(ui) {
   }
 
   tokenize <- function(ui) {
-    str_regex <- "(?:(\\(|\\))|([\\[\\]#{}])|(\".*?\")|([*+\\w\\d\\/-]+))"
+    str_regex <- "(?:(\\(|\\))|([\\[\\]#{}])|(\".*?\")|([*+\\w\\d\\/.-]+))"
     tokens <- stringr::str_match_all(ui, str_regex)[[1]][,1]
     return(tokens)
   }
@@ -151,7 +151,12 @@ ast <- function(ui) {
     return(o)
   }
 
-  lst <- add_tokens(tokens)
-  output <- run_ast(lst)
+  if (tokens[[1]] == "(") {
+    lst <- add_tokens(tokens)
+    output <- run_ast(lst)
+  } else {
+    ## is a variable
+    output <- eval_function(tokens)
+  }
   return(output)
 }
