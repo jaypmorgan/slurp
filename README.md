@@ -10,6 +10,14 @@
 
 # [1] 8
 
+(defparam x 5)
+
+# [1] 5
+
+(+ x 5)
+
+# [1] 10
+
 (rnorm 10 10 10)
 
 # [1]  14.8692128   3.4932029  18.6337963  15.5319696  -2.9426000 -11.6523209
@@ -33,7 +41,7 @@
 - [X] Vector notation
 - [X] Nested function application
 - [ ] Function definitions
-- [ ] Variable assignments
+- [X] Variable assignments
 - [ ] Sets and Lists
 - [ ] Keyword arguments
 - [ ] Macros

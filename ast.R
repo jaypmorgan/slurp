@@ -1,6 +1,26 @@
+library(rlang)
 source("listprocessor.R")
 
 ast <- function(ui) {
+
+  prepare_args <- function(...) {
+    args <- unlist(list(...))
+    return(args)
+  }
+
+  function_map <- list()
+  function_map[["+"]] <- function(...) { args <- prepare_args(...); paste(args[[1]], "+", args[[2]]) }
+  function_map[["-"]] <- function(...) { args <- prepare_args(...); paste(args[[1]], "-", args[[2]]) }
+  function_map[["*"]] <- function(...) { args <- prepare_args(...); paste(args[[1]], "*", args[[2]]) }
+  function_map[["/"]] <- function(...) { args <- prepare_args(...); paste(args[[1]], "/", args[[2]]) }
+  function_map[["defparam"]] <- function(...) {
+    a <- prepare_args(...);
+    e <- env_parents()[[2]]
+    assign(a[[1]], str2lang(a[[2]]), envir = e)
+    return(str2lang(a[[2]]))
+  }
+
+
   is_infix <- function(fun) {
     infix_ops <- c("+", "-", "*", "/", "%")
     if (fun %in% infix_ops) {
@@ -14,10 +34,6 @@ ast <- function(ui) {
     str_regex <- "(?:(\\(|\\))|([\\[\\]#{}])|(\".*?\")|([*+\\w\\d\\/-]+))"
     tokens <- stringr::str_match_all(ui, str_regex)[[1]][,1]
     return(tokens)
-  }
-
-  arithmetic_fun <- function(op, arg1, arg2) {
-    return(paste0(arg1, op, arg2))
   }
 
   to_vector <- function(tokens) {
@@ -68,8 +84,8 @@ ast <- function(ui) {
       args <- new_args
     }
 
-    if (is_infix(func)) {
-      fun <- arithmetic_fun(func, args[[1]], args[[2]])
+    if (func %in% names(function_map)) {
+      fun <- function_map[[func]](args)
     } else {
       fun <- general_fun(func, args)
     }
