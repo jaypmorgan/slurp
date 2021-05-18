@@ -102,15 +102,20 @@ ast <- function(ui) {
   }
 
   eval_function <- function(fun) {
-    print(fun)
+    out <- NULL
     tryCatch({
-        out <- eval(parse(text=fun))
-        return(out)
+      out <- eval(parse(text=fun))
     },
     error=function(cond) {
       cat(paste(cond, "\n"))
-      return(NULL)
+      out <- NULL
+    },
+    warning=function(cond) {
+      out <- eval(parse(text=fun))
+      cat(paste(cond, "\n"))
+
     })
+    return(out)
   }
 
   eval_variable <- function(v) {
