@@ -57,8 +57,12 @@ ast <- function(ui) {
   general_fun <- function(...) {
     args <- list(...)
     func <- args[[1]]
-    args <- args[2:length(args)][[1]]
-    fun <- paste0(func, "(", paste0(args, collapse = ", "), ")")
+    if (!is.na(args[[2]])[[1]]) {
+      args <- args[2:length(args)][[1]]
+      fun <- paste0(func, "(", paste0(args, collapse = ", "), ")")
+    } else {
+      fun <- paste0(func, "()")
+    }
     return(fun)
   }
 
