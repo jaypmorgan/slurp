@@ -27,7 +27,7 @@
 - [X] Lisp tokenisation
 - [X] Basic function application
 - [X] Vector notation
-- [ ] Nested function application
+- [X] Nested function application
 - [ ] Function definitions
 - [ ] Variable assignments
 - [ ] Sets and Lists

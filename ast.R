@@ -1,3 +1,5 @@
+source("listprocessor.R")
+
 ast <- function(ui) {
   is_infix <- function(fun) {
     infix_ops <- c("+", "-", "*", "/", "%")
@@ -80,30 +82,56 @@ ast <- function(ui) {
     },
     error=function(cond) {
       message(paste0(cond, "\n"))
-      return(NA)
+      return(NULL)
     })
   }
 
   tokens <- tokenize(ui)
-  end_point <- -1
-  start_point <- -1
-  output <- ""
+  root <- NULL
 
-  for (i in length(tokens):1) {
-    t <- tokens[[i]]
-    if (t == ")") {
-      end_point <- i
-    }
-    if (t == "(") {
-      start_point <- i
-    }
 
-    if (start_point != -1 && end_point != -1) {
-      fun <-compile_function(tokens[(start_point+1):(end_point-1)])
-      output <- eval_function(fun)
-      start_point <- -1
-      end_point <- -1
+  add_tokens <- function(tokens) {
+    out <- preallocate(n = 10)
+    i <- 1
+    while (i <= length(tokens)) {
+      token <- tokens[[i]]
+
+      if (token == "(" && !is.null(first(out))) {
+        end_token <- 0
+        for (e in 1:length(tokens)) {
+          t <- tokens[[e]]
+          if (t == ")") {
+            end_token <- e
+            break
+          }
+        }
+        out <- add_element(out, add_tokens(tokens[i:end_token]))
+        i <- end_token
+      } else if (token != ")" && token != "(") {
+        out <- add_element(out, token)
+      }
+      i <- i + 1
     }
+    return(out)
   }
+
+  run_ast <- function(lst) {
+    fun <- lst[[1]]
+    args <- c()
+
+    for (el in 2:find_last(lst)) {
+      item <- lst[[el]]
+      if (typeof(item) == "list") {
+        item <- run_ast(item)
+      }
+      args <- c(args, item)
+    }
+    o <- compile_function(c(fun, args))
+    o <- eval_function(o)
+    return(o)
+  }
+
+  lst <- add_tokens(tokens)
+  output <- run_ast(lst)
   return(output)
 }
