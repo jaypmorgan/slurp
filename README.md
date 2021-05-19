@@ -41,8 +41,18 @@
 - [X] Vector notation
 - [X] Nested function application
 - [ ] Function definitions
+- [ ] Lambdas
 - [X] Variable assignments
 - [ ] Sets and Lists
 - [ ] Keyword arguments
 - [ ] Macros
 - [ ] Pre-installed macros such as threading
+
+### Functions to implement
+
+- [ ] Cons
+- [ ] Listp
+- [ ] Atomp
+- [ ] Better evaluation - special symbols evaluate to themselves
+- [ ] Better tokenisation -- should take into account the end of the list to allow scripts to run
+- [ ] Quote/Eval

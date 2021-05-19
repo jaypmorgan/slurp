@@ -9,7 +9,7 @@ ast <- function(ui) {
   }
 
   function_map <- list()
-  function_map[["+"]] <- function(a, b) { paste("(", a, "+", b, ")") }
+  function_map[["+"]] <- function(a, b) { paste("call(", "\"+\",", a, ", ", b, ")") }
   function_map[["-"]] <- function(a, b) { paste("(", a, "-", b, ")") }
   function_map[["*"]] <- function(a, b) { paste("(", a, "*", b, ")") }
   function_map[["/"]] <- function(a, b) { paste("(", a, "/", b, ")") }
@@ -93,6 +93,9 @@ ast <- function(ui) {
       if (!is_infix(func)) {
         fun <- function_map[[func]](args)
       } else {
+        ## args[[1]] <- toString(eval(str2lang(args[[1]])))
+        ## args[[2]] <- toString(eval(str2lang(args[[2]])))
+        ## print(args[[1]])
         fun <- function_map[[func]](args[[1]], args[[2]])
       }
     } else {
@@ -170,7 +173,6 @@ ast <- function(ui) {
       args <- c(args, item)
     }
     o <- compile_function(c(fun, args))
-    ## o <- eval_function(o)
     return(o)
   }
 
@@ -179,8 +181,7 @@ ast <- function(ui) {
     output <- run_ast(lst)
     output <- eval_function(output)
   } else {
-    ## is a variable
-    output <- eval_variable(tokens)
+    output <- eval(eval_variable(tokens))
   }
   return(output)
 }
