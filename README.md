@@ -1,5 +1,5 @@
 <p align="center">
-![logo](docs/images/logo.png)
+<img src="docs/images/logo.png"/>
 
 *Statistical Lisp in R*
 </p>
