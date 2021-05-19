@@ -1,40 +1,24 @@
 library(rlang)
 source("listprocessor.R")
 
-ast <- function(ui) {
+ast <- function(input) {
+  fun_re <- "^\\("
+  fun_con <- "(?:(\\(|\\))|([\\[\\]#{}])|(\".*?\")|([*+<>\\w\\d\\/.-]+))"
 
-  prepare_args <- function(...) {
-    args <- unlist(list(...))
-    return(args)
+  is_fun <- function(input) {
+    return(stringr::str_detect(input, fun_re))
   }
 
-  function_map <- list()
-  function_map[["+"]] <- function(a, b) { paste("call(", "\"+\",", a, ", ", b, ")") }
-  function_map[["-"]] <- function(a, b) { paste("(", a, "-", b, ")") }
-  function_map[["*"]] <- function(a, b) { paste("(", a, "*", b, ")") }
-  function_map[["/"]] <- function(a, b) { paste("(", a, "/", b, ")") }
-  function_map[["^"]] <- function(a, b) { paste("(", a, "^", b, ")") }
-  function_map[["defparam"]] <- function(...) {
-    a <- prepare_args(...);
-    e <- env_parents()[[2]]
-    assign(a[[1]], str2lang(a[[2]]), envir = e)
-    return(a[[2]])
-  }
-
-
-  is_infix <- function(fun) {
-    infix_ops <- c("+", "-", "*", "/", "%")
-    if (fun %in% infix_ops) {
-      return(TRUE)
-    } else {
-      return(FALSE)
+  find_first_stop <- function(lst, stop_token = ")") {
+    t <- 1
+    for (item in lst) {
+      if (item == stop_token) {
+        break
+      } else {
+        t <- t + 1
+      }
     }
-  }
-
-  tokenize <- function(ui) {
-    str_regex <- "(?:(\\(|\\))|([\\[\\]#{}])|(\".*?\")|([*+\\w\\d\\/.-]+))"
-    tokens <- stringr::str_match_all(ui, str_regex)[[1]][,1]
-    return(tokens)
+    return(t)
   }
 
   to_vector <- function(tokens) {
@@ -55,133 +39,65 @@ ast <- function(ui) {
     return(v)
   }
 
-  general_fun <- function(...) {
-    args <- list(...)
-    func <- args[[1]]
-    if (!is.na(args[[2]])[[1]]) {
-      args <- args[2:length(args)][[1]]
-      fun <- paste0(func, "(", paste0(args, collapse = ", "), ")")
+  tokenize_function <- function(input, depth=0) {
+    boundaries <- c("[", "]", "(", ")", "{", "}")
+    contents <- list()
+    counter <- 0
+    if (typeof(input) == "list") {
+      tokens <- input[[1]]
     } else {
-      fun <- paste0(func, "()")
+      tokens <- stringr::str_match_all(input, fun_con)[[1]][,1]
     }
-    return(fun)
-  }
+    skip_tokens <- FALSE
+    end_token <- 0
+    for (i in 1:length(tokens)) {
 
-  compile_function <- function(inputs) {
-    func <- inputs[[1]]
-    args <- inputs[2:length(inputs)]
-
-    if ("[" %in% args) {
-      # find the start and end point of the vector
-      start_idx <- which("[" == args)
-      end_idx <- which("]" == args)
-      v <- to_vector(args[start_idx:end_idx])
-      new_args <- c()
-
-      # resize arguments concatenating middle vector
-      if (start_idx != 1) {
-        new_args <- c(new_args, args[1:(start_idx-1)])
-      }
-      new_args <- c(new_args, v)
-      if (end_idx != length(args)) {
-        new_args <- c(new_args, args[1:(end_idx)])
-      }
-      args <- new_args
-    }
-
-    if (func %in% names(function_map)) {
-      if (!is_infix(func)) {
-        fun <- function_map[[func]](args)
-      } else {
-        ## args[[1]] <- toString(eval(str2lang(args[[1]])))
-        ## args[[2]] <- toString(eval(str2lang(args[[2]])))
-        ## print(args[[1]])
-        fun <- function_map[[func]](args[[1]], args[[2]])
-      }
-    } else {
-      fun <- general_fun(func, args)
-    }
-    return(fun)
-  }
-
-  eval_function <- function(fun) {
-    out <- NULL
-    tryCatch({
-      out <- eval(parse(text=fun))
-    },
-    error=function(cond) {
-      cat(paste(cond, "\n"))
-      out <- NULL
-    },
-    warning=function(cond) {
-      out <- eval(parse(text=fun))
-      cat(paste(cond, "\n"))
-
-    })
-    return(out)
-  }
-
-  eval_variable <- function(v) {
-    tryCatch({
-        out <- eval(str2lang(v))
-        return(out)
-    },
-    error=function(cond) {
-      cat(paste(cond, "\n"))
-      return(NULL)
-    })
-  }
-
-  tokens <- tokenize(ui)
-  root <- NULL
-
-
-  add_tokens <- function(tokens) {
-    out <- preallocate(n = 10)
-    i <- 1
-    while (i <= length(tokens)) {
-      token <- tokens[[i]]
-
-      if (token == "(" && !is.null(first(out))) {
-        end_token <- 0
-        for (e in 1:length(tokens)) {
-          t <- tokens[[e]]
-          if (t == ")") {
-            end_token <- e
-            break
-          }
+      if (skip_tokens) {
+        if (i < end_token) {
+          # move onto the next token
+          next
+        } else {
+          # done skipping
+          end_token <- 0
+          skip_tokens <- FALSE
         }
-        out <- add_element(out, add_tokens(tokens[i:end_token]))
-        i <- end_token
-      } else if (token != ")" && token != "(") {
-        out <- add_element(out, token)
       }
-      i <- i + 1
-    }
-    return(out)
-  }
 
-  run_ast <- function(lst) {
-    fun <- lst[[1]]
-    args <- c()
-
-    for (el in 2:find_last(lst)) {
-      item <- lst[[el]]
-      if (typeof(item) == "list") {
-        item <- run_ast(item)
+      token <- tokens[[i]]
+      if (token == "[") {
+        end_token <- find_first_stop(tokens, "]")
+        contents[[counter <- counter + 1]] <- to_vector(list(tokens[i:end_token])[[1]])
+        skip_tokens <- TRUE
+      } else if (!(token %in% boundaries)) {
+        contents[[counter <- counter + 1]] <- token
+      } else if (token == "(" && length(contents) >= 1) {
+        end_token <- find_first_stop(tokens)
+        contents[[counter <- counter + 1]] <- tokenize_function(list(tokens[(i+1):end_token]), depth=2)
+        skip_tokens <- TRUE
       }
-      args <- c(args, item)
     }
-    o <- compile_function(c(fun, args))
-    return(o)
+    return(contents)
   }
 
-  if (tokens[[1]] == "(") {
-    lst <- add_tokens(tokens)
-    output <- run_ast(lst)
-    output <- eval_function(output)
-  } else {
-    output <- eval(eval_variable(tokens))
+  tokenize <- function(input) {
+    if (is_fun(input)) {
+      return(tokenize_function(input))
+    } else {
+      # try to evaluate directly
+      return(input)
+    }
   }
-  return(output)
+  return(tokenize(input))
+}
+
+
+display.ast <- function(ast_list, depth = 0) {
+  for (item in ast_list) {
+    if (typeof(item) == "list") {
+      display.ast(item, depth = depth + 1)
+    } else {
+      indentation <- paste(replicate("--", n = depth), collapse = "")
+      print(paste(indentation, item, collapse = ""))
+    }
+  }
 }

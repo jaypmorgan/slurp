@@ -1,4 +1,5 @@
 source("ast.R")
+source("evaluation.R")
 
 repl <- function() {
   prompt <- "SluRp> "
@@ -11,13 +12,11 @@ repl <- function() {
   }
 
   leval <- function(ui) {
-    ## if (stringi::stri_enc_toascii(ui)) {
-    ##   q("no")
-    ## }
     if (ui == "(exit)") {
       q("no")
     } else if (ui != "") {
-      out <- ast(ui)
+      lst <- ast(ui)
+      out <- evaluate_ast(lst)
     } else {
       out <- ""
     }
