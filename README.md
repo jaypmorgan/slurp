@@ -48,7 +48,7 @@ SluRp> (+ x y)
 ```
 
 As its implemented in the `R` environment, the usual statistical
-functions are readily available. Here we are taken 10 samples from a
+functions are readily available. Here we are taking 10 samples from a
 normal distribution with the centre and scale of 10. The return of
 this function is a vector of 10 elements.
 
@@ -87,7 +87,7 @@ SluRp> (mean [1 2 3 4 5])
 ### Creating functions
 
 Anonymous functions can be created using a `lambda` expression. Take
-for example applying a function to a map (from the `purrr` package.
+for example applying a function to a map (from the `purrr` package).
 
 ```lisp
 SluRp> (library purrr)
@@ -104,7 +104,7 @@ SluRp> (map [1 2 3] (lambda (x) (* x 2)))
 ```
 
 Anonymous functions can also be bound to a name. This is perhaps just
-a longer way of creating a function
+a longer way of creating a function.
 
 ```lisp
 SluRp> (defparam print_name (lambda (name) (print (paste "Hello, " name))))
