@@ -21,6 +21,12 @@ Start the REPL:
 SluRp>
 ```
 
+Or you can run a SluRp script:
+
+```bash
+./slurp test.slurp
+```
+
 In the REPL you can enter the lisp-style commands:
 
 ```lisp

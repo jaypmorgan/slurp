@@ -7,3 +7,5 @@
 
 (print
   (mean (^ x 10)))
+
+(print (map [1 2 3 4 5] (lambda (x) (* x 10))))
