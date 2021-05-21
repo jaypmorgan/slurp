@@ -24,7 +24,7 @@ SluRp>
 In the REPL you can enter the lisp-style commands:
 
 ```lisp
-(+ 2 (* 2 3))
+SluRp> (+ 2 (* 2 3))
 
 # [1] 8
 ```
@@ -34,15 +34,15 @@ the value associated with the variable name. These variables can then
 be references in the same scope.
 
 ```lisp
-(defparam x 5)
+SluRp> (defparam x 5)
 
 # [1] 5
 
-(defparam y 10)
+SluRp> (defparam y 10)
 
 # [1] 10
 
-(+ x y)
+SluRp> (+ x y)
 
 # [1] 15
 ```
@@ -53,7 +53,7 @@ normal distribution with the centre and scale of 10. The return of
 this function is a vector of 10 elements.
 
 ```lisp
-(rnorm 10 10 10)
+SluRp> (rnorm 10 10 10)
 
 # [1]  14.8692128   3.4932029  18.6337963  15.5319696  -2.9426000 -11.6523209
 # [7]  -0.9475137   6.1512033   4.6517305   8.0993424
@@ -65,11 +65,12 @@ to the stream output. In SluRp, the argument that is passed to the
 function is printed to the stream and also returned.
 
 ```lisp
-(print "testing")
-
-# "testing"
-# [1] "testing"
+SluRp> (print "testing")
+[1] "testing"
+[1] "testing"
 ```
+
+### Data types
 
 Lisp is a list processor, but we're working with `R`, so we have
 access to more complex data-types. One of which is the vector or `c()`
@@ -79,10 +80,43 @@ vector with squared-brackets, e.g. `[1 2 3]` is translated to `c(1, 2,
 expect vector arguments:
 
 ```lisp
-(mean [1 2 3 4 5])
-
-# [1] 3
+SluRp> (mean [1 2 3 4 5])
+[1] 3
 ```
+
+### Creating functions
+
+Anonymous functions can be created using a `lambda` expression. Take
+for example applying a function to a map (from the `purrr` package.
+
+```lisp
+SluRp> (library purrr)
+
+SluRp> (map [1 2 3] (lambda (x) (* x 2)))
+[[1]]
+[1] 2
+
+[[2]]
+[1] 4
+
+[[3]]
+[1] 6
+```
+
+Anonymous functions can also be bound to a name. This is perhaps just
+a longer way of creating a function
+
+```lisp
+SluRp> (defparam print_name (lambda (name) (print (paste "Hello, " name))))
+function (name)
+{
+    print(paste("Hello, ", name))
+}
+SluRp> (print_name "SluRp")
+[1] "Hello,  SluRp"  # value is printed to stream
+[1] "Hello,  SluRp"  # value is also returned
+```
+
 
 ## Things to do:
 
