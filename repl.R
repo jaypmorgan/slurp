@@ -15,8 +15,15 @@ repl <- function() {
     if (ui == "(exit)") {
       q("no")
     } else if (ui != "") {
-      lst <- ast(ui)
-      out <- evaluate_ast(lst)
+      out <- tryCatch({
+        lst <- ast(ui)
+        out <- evaluate_ast(lst)
+        return(out)
+      },
+      error = function(cond) {
+        message(paste0(cond, "\n"))
+        return(NULL)
+      })
     } else {
       out <- ""
     }
@@ -24,9 +31,10 @@ repl <- function() {
   }
 
   lprint <- function(output) {
-    if (!is.null(output) && output != "") {
-      print(output)
-    }
+    ## if (!is.null(output) && output != "") {
+    ##   print(output)
+    ## }
+    print(output)
   }
 
   lrep <- function() {}

@@ -91,7 +91,7 @@ expect vector arguments:
 - [X] Vector notation
 - [X] Nested function application
 - [ ] Function definitions
-- [ ] Lambdas
+- [X] Lambdas
 - [X] Variable assignments
 - [ ] Sets and Lists
 - [ ] Keyword arguments

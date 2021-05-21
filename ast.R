@@ -9,7 +9,7 @@ ast <- function(input) {
     return(stringr::str_detect(input, fun_re))
   }
 
-  find_first_stop <- function(lst, stop_token = ")") {
+  find_first_token <- function(lst, stop_token = ")") {
     t <- 1
     for (item in lst) {
       if (item == stop_token) {
@@ -19,6 +19,22 @@ ast <- function(input) {
       }
     }
     return(t)
+  }
+
+  find_matching_token <- function(lst, start_token = "(", end_token = ")") {
+    n   <- 0
+    end <- 0
+    start <- find_first_token(lst, start_token)
+    for (t in start:length(lst)) {
+      if (lst[[t]] == end_token && n == 1) {
+        end <- t
+      } else if (lst[[t]] == start_token) {
+        n <- n + 1
+      } else if (lst[[t]] == end_token) {
+        n <- n - 1
+      }
+    }
+    return(list(start = start, end = end))
   }
 
   to_vector <- function(tokens) {
@@ -39,49 +55,66 @@ ast <- function(input) {
     return(v)
   }
 
-  tokenize_function <- function(input, depth=0) {
-    boundaries <- c("[", "]", "(", ")", "{", "}")
+  find_ends <- function(lst, start_token = "(", end_token = ")") {
+    n <- 0
+    end <- -1
+    for (i in 1:length(lst)) {
+      token <- lst[[i]]
+      if (token == end_token && n == 0) {
+        return(i)
+      } else if (token == start_token && i != 1) {
+        n <- n + 1
+      } else if (token == end_token) {
+        n <- n - 1
+      }
+    }
+    if (end == -1) {
+      stop("Unbalanced paranthesis")
+    }
+    return(end)
+  }
+
+  find_start_ends <- function(lst, find_token = "(", end_token = ")") {
+    starts <- c()
+    ends <- c()
+    for (index in 1:length(lst)) {
+      token <- lst[[index]]
+      if (token == find_token) {
+        starts <- c(starts, index)
+        end <- find_ends(lst[index:length(lst)], start_token = find_token, end_token = end_token)
+        end <- end + (index-1)
+        ends <- c(ends, end)
+      }
+    }
+    return(list(starts = starts, ends = ends))
+  }
+
+  tokenize_function <- function(tokens) {
     contents <- list()
     counter <- 0
-    if (typeof(input) == "list") {
-      tokens <- input[[1]]
-    } else {
-      tokens <- stringr::str_match_all(input, fun_con)[[1]][,1]
-    }
-    skip_tokens <- FALSE
-    end_token <- 0
-    for (i in 1:length(tokens)) {
+    i <- 2
 
-      if (skip_tokens) {
-        if (i < end_token) {
-          # move onto the next token
-          next
-        } else {
-          # done skipping
-          end_token <- 0
-          skip_tokens <- FALSE
-        }
-      }
-
+    while (i < length(tokens)) {
       token <- tokens[[i]]
-      if (token == "[") {
-        end_token <- find_first_stop(tokens, "]")
-        contents[[counter <- counter + 1]] <- to_vector(list(tokens[i:end_token])[[1]])
-        skip_tokens <- TRUE
-      } else if (!(token %in% boundaries)) {
-        contents[[counter <- counter + 1]] <- token
-      } else if (token == "(" && length(contents) >= 1) {
-        end_token <- find_first_stop(tokens)
-        contents[[counter <- counter + 1]] <- tokenize_function(list(tokens[(i+1):end_token]), depth=2)
-        skip_tokens <- TRUE
+
+      if (token == ")") { break }
+      if (token == "(") {
+        out <- tokenize_function(tokens[i:length(tokens)])
+        i <- out$end + (i - 1)  # skip past the already processed sublist
+        token <- out$contents
       }
+
+      contents[[counter <- counter + 1]] <- token
+      i <- i + 1
     }
-    return(contents)
+
+    return(list(contents = contents, end = i))
   }
 
   tokenize <- function(input) {
     if (is_fun(input)) {
-      return(tokenize_function(input))
+      tokens <- stringr::str_match_all(input, fun_con)[[1]][,1]
+      return(tokenize_function(tokens)$contents)
     } else {
       # try to evaluate directly
       return(input)
@@ -91,7 +124,7 @@ ast <- function(input) {
 }
 
 
-display.ast <- function(ast_list, depth = 0) {
+display_ast <- function(ast_list, depth = 0) {
   for (item in ast_list) {
     if (typeof(item) == "list") {
       display.ast(item, depth = depth + 1)
