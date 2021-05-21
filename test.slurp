@@ -1,0 +1,9 @@
+(library tidyverse)
+
+(defparam x
+  (rnorm 100 0 1))
+
+(print (* x 2))
+
+(print
+  (mean (^ x 10)))
