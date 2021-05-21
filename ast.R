@@ -89,7 +89,7 @@ ast <- function(input) {
     return(list(starts = starts, ends = ends))
   }
 
-  tokenize_function <- function(tokens) {
+  tokenize_function <- function(tokens, start_token = "(", end_token = ")") {
     contents <- list()
     counter <- 0
     i <- 2
@@ -97,11 +97,18 @@ ast <- function(input) {
     while (i < length(tokens)) {
       token <- tokens[[i]]
 
-      if (token == ")") { break }
-      if (token == "(") {
+      if (token == end_token) { break }
+      if (token == start_token) {
         out <- tokenize_function(tokens[i:length(tokens)])
         i <- out$end + (i - 1)  # skip past the already processed sublist
         token <- out$contents
+      }
+
+      if (token == "[") {
+        out <- tokenize_function(tokens[i:length(tokens)], start_token = "[", end_token = "]")
+        i <- out$end + (i - 1)
+        token <- out$contents
+        token <- paste0("c(", paste(token, collapse=", "), ")")
       }
 
       contents[[counter <- counter + 1]] <- token
