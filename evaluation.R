@@ -1,4 +1,5 @@
 source("listprocessor.R")
+source("functions.R")
 
 evaluate_ast <- function(ast_list) {
 
@@ -10,7 +11,7 @@ evaluate_ast <- function(ast_list) {
   }
 
   is_infix <- function(fun) {
-    infix_ops <- c("+", "-", "*", "/", "%", "^")
+    infix_ops <- c("+", "-", "*", "/", "%", "^", ">", "<", ">=", "<=", "==")
     if (fun %in% infix_ops) {
       return(TRUE)
     } else {
