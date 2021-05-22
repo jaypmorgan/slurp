@@ -6,11 +6,11 @@ args <- commandArgs(trailingOnly = TRUE)
 
 if (length(args) == 0) {
   # repl mode
-  source("repl.R")
+  source("R/repl.R")
 } else {
   # source code mode
-  source("ast.R")
-  source("evaluation.R")
+  source("R/ast.R")
+  source("R/evaluation.R")
   source_code <- paste(readLines(args[[1]]), collapse = "\n")
   source_code <- stringi::stri_replace_all(source_code, regex = "\\s\\s\\s", " ")
   source_code <- stringr::str_match_all(source_code, "(\\(.*\\))")[[1]][,1]

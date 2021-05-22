@@ -1,5 +1,5 @@
 library(rlang)
-source("listprocessor.R")
+source("R/listprocessor.R")
 
 ast <- function(input) {
   fun_re <- "^\\("

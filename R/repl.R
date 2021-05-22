@@ -1,5 +1,5 @@
-source("ast.R")
-source("evaluation.R")
+source("R/ast.R")
+source("R/evaluation.R")
 
 repl <- function() {
   prompt <- "SluRp> "
@@ -12,7 +12,8 @@ repl <- function() {
   }
 
   leval <- function(ui) {
-    if (ui == "(exit)") {
+    if (length(ui) == 0 || ui == "(exit)") {
+      cat("\n")
       q("no")
     } else if (ui != "") {
       out <- tryCatch({

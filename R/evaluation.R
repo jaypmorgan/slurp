@@ -1,5 +1,5 @@
-source("listprocessor.R")
-source("functions.R")
+source("R/listprocessor.R")
+source("R/functions.R")
 
 evaluate_ast <- function(ast_list) {
 

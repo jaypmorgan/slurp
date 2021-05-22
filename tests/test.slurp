@@ -12,3 +12,10 @@
 
 (defparam weird-name? TRUE)
 (print weird-name?)
+
+(defun my-cool-function (num-samples mean sd)
+  (rnorm num-samples :mean mean :sd sd))
+
+(print (my-cool-function 10 10 10))
+
+(+ 1 2 3 4 5)
