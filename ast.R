@@ -3,7 +3,7 @@ source("listprocessor.R")
 
 ast <- function(input) {
   fun_re <- "^\\("
-  fun_con <- "(?:(\\(|\\))|([\\[\\]#{}])|(\".*?\")|([*+<>^\\w\\d\\/.-]+))"
+  fun_con <- "(?:(\\(|\\))|([\\[\\]#{}])|(\".*?\")|([*+<>^:?\\w\\d\\/.-]+))"
 
   is_fun <- function(input) {
     return(stringr::str_detect(input, fun_re))
@@ -58,7 +58,7 @@ ast <- function(input) {
   find_ends <- function(lst, start_token = "(", end_token = ")") {
     n <- 0
     end <- -1
-    for (i in 1:length(lst)) {
+    for (i in seq_len(length(lst))) {
       token <- lst[[i]]
       if (token == end_token && n == 0) {
         return(i)
@@ -77,7 +77,7 @@ ast <- function(input) {
   find_start_ends <- function(lst, find_token = "(", end_token = ")") {
     starts <- c()
     ends <- c()
-    for (index in 1:length(lst)) {
+    for (index in seq_len(length(lst))) {
       token <- lst[[index]]
       if (token == find_token) {
         starts <- c(starts, index)
@@ -104,7 +104,7 @@ ast <- function(input) {
         token <- out$contents
       }
 
-      if (token == "[") {
+      if (typeof(token) != "list" && token == "[") {
         out <- tokenize_function(tokens[i:length(tokens)], start_token = "[", end_token = "]")
         i <- out$end + (i - 1)
         token <- out$contents

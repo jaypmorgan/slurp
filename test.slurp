@@ -5,7 +5,10 @@
 
 (print (* x 2))
 
-(print
-  (mean (^ x 10)))
+(print (mean (^ x 10)))
 
-(print (map [1 2 3 4 5] (lambda (x) (* x 10))))
+(print
+  (map [1 2 3 4 5] (lambda (x) (* x 10))))
+
+(defparam weird-name? TRUE)
+(print weird-name?)

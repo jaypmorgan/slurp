@@ -35,6 +35,13 @@ SluRp> (+ 2 (* 2 3))
 # [1] 8
 ```
 
+Unlike `R`, arithmetic functions are applied over all arguments:
+
+```lisp
+SluRp> (+ 1 2 3 4 5)
+[1] 15
+```
+
 Create variables using the `defparam` function. This function returns
 the value associated with the variable name. These variables can then
 be references in the same scope.
@@ -63,6 +70,20 @@ SluRp> (rnorm 10 10 10)
 
 # [1]  14.8692128   3.4932029  18.6337963  15.5319696  -2.9426000 -11.6523209
 # [7]  -0.9475137   6.1512033   4.6517305   8.0993424
+```
+
+Function arguments can be supplied using the `:keyword` form. For example:
+
+```lisp
+SluRp> (rnorm 10 :mean 10 :sd 1)
+ [1] 10.306800 11.189320 10.914911 10.141386 11.459372  9.440626 10.889350
+ [8]  9.807462 11.059608 10.595251
+```
+
+In this example, we are once again calling the `rnorm` function and taking 10 samples from a normal distribution. But instead of supplying the arguments by the position they occur in the function call (number of samples, mean, and then standard deviation of the distribution), we are using keywords. When this form is evaluated in `R` this gets translated to:
+
+```R
+rnorm(10, mean = 10, sd = 1)
 ```
 
 As opposed to `R` base, most functions return a value. Take for
@@ -123,6 +144,21 @@ SluRp> (print_name "SluRp")
 [1] "Hello,  SluRp"  # value is also returned
 ```
 
+The shorter way to create a normal function is to use the `defun`
+function. The arguments to `defun` are the parameters of the function
+(or an optional empty list) and the body of the function i.e. what
+happens when the function is called.
+
+```lisp
+SluRp> (defun add (x y) (+ x y)
+function (x, y)
+{
+    x + y
+}
+SluRp> (add 1 2)
+[1] 3
+```
+
 
 ## Things to do:
 
@@ -130,11 +166,11 @@ SluRp> (print_name "SluRp")
 - [X] Basic function application
 - [X] Vector notation
 - [X] Nested function application
-- [ ] Function definitions
+- [X] Function definitions
 - [X] Lambdas
 - [X] Variable assignments
 - [ ] Sets and Lists
-- [ ] Keyword arguments
+- [X] Keyword arguments
 - [ ] Macros
 - [ ] Pre-installed macros such as threading
 

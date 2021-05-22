@@ -15,7 +15,6 @@ if (length(args) == 0) {
   source_code <- stringi::stri_replace_all(source_code, regex = "\\s\\s\\s", " ")
   source_code <- stringr::str_match_all(source_code, "(\\(.*\\))")[[1]][,1]
   for (statement in source_code) {
-    print(statement)
     evaluate_ast(ast(statement))
   }
 }
