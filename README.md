@@ -150,7 +150,7 @@ function. The arguments to `defun` are the parameters of the function
 happens when the function is called.
 
 ```lisp
-SluRp> (defun add (x y) (+ x y)
+SluRp> (defun add (x y) (+ x y))
 function (x, y)
 {
     x + y
