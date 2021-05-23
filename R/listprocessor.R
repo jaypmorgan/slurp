@@ -3,7 +3,7 @@ first <- function(lst) {
 }
 
 rest <- function(lst) {
-  return(lst[2:length(lst)])
+  return(lst[c(-1)])
 }
 
 nth <- function(lst, n) {

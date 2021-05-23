@@ -1,21 +1,28 @@
 (library tidyverse)
 
-(defparam x
+(defparam x ;; this is a comment
   (rnorm 100 0 1))
+
+(defun my-cool-function (num-samples mean sd)
+  "my docstring"
+  (rnorm num-samples :mean mean :sd sd))
+
+(defun print-my-name (name) (print (paste "Hello," name)))
+
+(print (my-cool-function 5 10 10))
 
 (print (* x 2))
 
 (print (mean (^ x 10)))
 
+(lambda (x) (* x 5))
+
 (print
-  (map [1 2 3 4 5] (lambda (x) (* x 10))))
+ (map [1 2 3 4 5] (lambda (x) (* x 10))))
 
 (defparam weird-name? TRUE)
 (print weird-name?)
 
-(defun my-cool-function (num-samples mean sd)
-  (rnorm num-samples :mean mean :sd sd))
-
-(print (my-cool-function 10 10 10))
-
 (+ 1 2 3 4 5)
+
+(print-my-name "SluRp")

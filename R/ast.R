@@ -2,6 +2,11 @@ library(rlang)
 source("R/listprocessor.R")
 
 ast <- function(input) {
+
+  filter_comments <- function(input) {
+    stringr::str_remove_all(input, "(;;.*$)")
+  }
+
   fun_re <- "^\\("
   fun_con <- "(?:(\\(|\\))|([\\[\\]#{}])|(\".*?\")|([*+<>^:?=&||\\w\\d\\/.-]+))"
 
@@ -119,6 +124,7 @@ ast <- function(input) {
   }
 
   tokenize <- function(input) {
+    input <- filter_comments(input)
     if (is_fun(input)) {
       tokens <- stringr::str_match_all(input, fun_con)[[1]][,1]
       return(tokenize_function(tokens)$contents)

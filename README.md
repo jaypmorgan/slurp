@@ -159,6 +159,14 @@ SluRp> (add 1 2)
 [1] 3
 ```
 
+## Language Lasagne
+
+What programming stack do you use? Answer: all of them:
+
+```lisp
+;; use slurp to talk to R, to talk to python, to talk to c/c++
+```
+
 
 ## Things to do:
 

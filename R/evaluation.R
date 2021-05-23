@@ -6,12 +6,13 @@ evaluate_ast <- function(ast_list) {
   defun <- function(name, args, body) {
     out <- paste(name, "<- function(", paste(args, collapse = ", "), ") {\n")
     body <- stringr::str_replace_all(body, "`", "expr")
-    out <- paste(out, compile_function(body[[1]], body[2:length(body)]), "\n}")
+    out <- paste(out, body, "\n}")
+    ## out <- paste(out, compile_function(body[[1]], body[2:length(body)]), "\n}")
     return(out)
   }
 
   is_infix <- function(fun) {
-    infix_ops <- c("+", "-", "*", "/", "%", "^", ">", "<", ">=", "<=", "==")
+    infix_ops <- c("+", "-", "*", "/", "%%", "^", ">", "<", ">=", "<=", "==")
     if (fun %in% infix_ops) {
       return(TRUE)
     } else {
@@ -47,7 +48,7 @@ evaluate_ast <- function(ast_list) {
   keywords_to_parameter <- function(args) {
     clean_args <- list()
     for (i in 1:length(args)) {
-      clean_args[[i]] <- stringr::str_replace_all(args[[i]], ":([\\w\\d_]+)", "\\1=")
+      clean_args[[i]] <- stringr::str_replace_all(args[[i]], ":([\\w\\d_]+),", "\\1=")
     }
     return(clean_args)
   }
@@ -64,17 +65,20 @@ evaluate_ast <- function(ast_list) {
     } else if (func == "defparam") {
       out <- paste(args[[1]], "<-", args[[2]])
     } else if (func == "lambda") {
-      statements <- c()
-      for (i in 2:length(args)) {
-        statements <- c(statements, paste0("  ", run_evaluation(args[[i]])))
-      }
       out <- paste0("function(", paste(args[[1]], collapse = ", "), ") {\n",
-                    paste(statements, collapse = "\n"),
+                    paste(args[[2:length(args)]], collapse = "\n"),
                     "\n}")
     } else if (func == "defun") {
-      out <- defun(args[[1]], args[[2]], args[[3]])
+      has_docstring <- stringr::str_detect(args[[3]], "^\".*\"")
+      if (has_docstring) {
+        docstring <- stringr::str_remove_all(args[[3]], "\"")
+        body <- paste("#'", docstring, "\n", args[[4]])
+      } else {
+        body <- args[[3]]
+      }
+      out <- defun(args[[1]], args[[2]], body)
     } else {
-      out <- paste0(func, "(", paste(keywords_to_parameter(args), collapse=","), ")")
+      out <- paste0(func, "(", keywords_to_parameter(paste(args, collapse=",")), ")")
     }
     return(out)
   }
@@ -84,8 +88,21 @@ evaluate_ast <- function(ast_list) {
     args <- rest(ast_list)
     evaluated_args <- list()
     counter <- 0
+    n_func <- FALSE
+
+    if (func %in% c("defun")) {
+      evaluated_args[[counter <- counter + 1]] <- args[[1]]
+      evaluated_args[[counter <- counter + 1]] <- args[[2]]
+      args <- args[c(-1, -2)]
+    }
+
+    if (func %in% c("lambda")) {
+      evaluated_args[[counter <- counter + 1]] <- args[[1]]
+      args <- args[c(-1)]
+    }
+
     for (item in args) {
-      if (typeof(item) == "list" && !(func %in% c("lambda", "defun"))) {
+      if (typeof(item) == "list") {
         evaluated_args[[counter <- counter + 1]] <- run_evaluation(item)
       } else {
         evaluated_args[[counter <- counter + 1]] <- item # evaluate_directly(item)
@@ -98,7 +115,7 @@ evaluate_ast <- function(ast_list) {
 
   var <- standardise_name(ast_list[[1]])
 
-  if (length(ast_list) > 1 || !(var %in% ls(rlang::env_parents()[[1]]))) {
+  if (length(ast_list) > 1 || (ast_list[[1]] != "" && !(var %in% ls(rlang::env_parents()[[1]])))) {
     func <- run_evaluation(ast_list)
     output <- eval(parse(text = func), envir = rlang::env_parents()[[1]])
   } else {

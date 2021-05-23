@@ -47,3 +47,13 @@ or <- function(...) {
 not <- function(arg) {
   return(!(arg))
 }
+
+thread_first <- function(...) {
+  args <- list(...)
+  x <- args[[1]]
+  for (i in 2:length(args)) {
+    lst <- args[[i]]
+    lst[[length(lst)+1]] <- x
+  }
+  return(x)
+}

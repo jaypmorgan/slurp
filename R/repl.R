@@ -56,5 +56,3 @@ repl <- function() {
 
   lmain()
 }
-
-repl()
