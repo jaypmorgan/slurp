@@ -26,3 +26,30 @@
 (+ 1 2 3 4 5)
 
 (print-my-name "SluRp")
+
+;; Language lasagnes
+
+(library reticulate)
+
+(defparam np (import "numpy"))
+(defparam torch (import "torch"))
+(defparam nn (import "torch.nn"))
+
+(defparam model
+  (nn$Sequential (nn$Linear :in_features 4L :out_features 10L)
+                 (nn$ReLU)
+                 (nn$Linear :in_features 10L :out_features 3L)
+                 (nn$Softmax)))
+(print model)
+
+(defun create-data ()
+  (torch$FloatTensor (np$array (as.matrix (select iris
+                                             [Sepal.Width, Sepal.Length, Petal.Width, Petal.Length])))))
+
+(defparam data (create-data))
+
+(print input-data)
+
+(defparam preds (model data))
+
+(print preds)

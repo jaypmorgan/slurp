@@ -159,12 +159,40 @@ SluRp> (add 1 2)
 [1] 3
 ```
 
-## Language Lasagne
+## Language Lasagnes
 
 What programming stack do you use? Answer: all of them:
 
 ```lisp
 ;; use slurp to talk to R, to talk to python, to talk to c/c++
+;; use reticulate to talk to python
+(library reticulate)
+
+;; import numpy as torch which should be implemented in C/C++
+(defparam np (import "numpy"))
+(defparam torch (import "torch"))
+(defparam nn (import "torch.nn"))
+
+;; define a simple feedforward network as a test
+(defparam model
+  (nn$Sequential (nn$Linear :in_features 4L :out_features 10L)
+                 (nn$ReLU)
+                 (nn$Linear :in_features 10L :out_features 3L)
+                 (nn$Softmax)))
+
+;; Use the existing iris dataset from R
+;; create a matrix of all the input features
+;; convert to a numpy array and then a torch tensor
+(defun get-data ()
+  (torch$FloatTensor
+    (np$array
+      (as.matrix (select iris [Sepal.Width, Sepal.Length, Petal.Width, Petal.Length])))))
+
+;; create class predictions (as the model isn't trained, these are just random predictions)
+(defparam preds (model get-data))
+
+;; print the predictions to stdout
+(print preds)
 ```
 
 

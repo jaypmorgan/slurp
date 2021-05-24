@@ -8,7 +8,7 @@ ast <- function(input) {
   }
 
   fun_re <- "^\\("
-  fun_con <- "(?:(\\(|\\))|([\\[\\]#{}])|(\".*?\")|([*+<>^:?=&||\\w\\d\\/.-]+))"
+  fun_con <- "(?:(\\(|\\))|([\\[\\]#{}])|(\".*?\")|([*+<>^:?=&$||\\w\\d\\/.-]+))"
 
   is_fun <- function(input) {
     return(stringr::str_detect(input, fun_re))
