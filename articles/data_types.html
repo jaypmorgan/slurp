@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Getting Started • slurp</title>
+<title>Data Types • slurp</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -17,7 +17,7 @@
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Getting Started">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Data Types">
 <meta property="og:description" content="slurp">
 <meta property="og:image" content="/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -79,23 +79,58 @@
 
       
 
-      </header><link href="getting_started_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
-<script src="getting_started_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
+      </header><link href="data_types_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
+<script src="data_types_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Getting Started</h1>
+      <h1 data-toc-skip>Data Types</h1>
             
       
       
-      <div class="hidden name"><code>getting_started.Rmd</code></div>
+      <div class="hidden name"><code>data_types.Rmd</code></div>
 
     </div>
 
     
     
-<div id="hello-world" class="section level1">
+<p>Lisp is a list processor, but we’re working with R, so we have access to more complex data-types. One of which is the vector or c() data-type for simple storage and vector arithmetic. We can create a vector with squared-brackets, e.g. [1 2 3] is translated to c(1, 2, 3). This translation is necessary for when we’re using functions that expect vector arguments:</p>
+<div id="vectors" class="section level1">
 <h1 class="hasAnchor">
-<a href="#hello-world" class="anchor"></a>Hello world</h1>
+<a href="#vectors" class="anchor"></a>Vectors</h1>
+<div class="sourceCode" id="cb1"><pre class="sourceCode lisp"><code class="sourceCode commonlisp"><a class="sourceLine" id="cb1-1" title="1">[<span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span>] <span class="co">;; creates a vector like c() in R</span></a>
+<a class="sourceLine" id="cb1-2" title="2"></a>
+<a class="sourceLine" id="cb1-3" title="3">(mean [<span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span>])</a>
+<a class="sourceLine" id="cb1-4" title="4"></a>
+<a class="sourceLine" id="cb1-5" title="5"><span class="co">;; perfect for vector arithmetic</span></a>
+<a class="sourceLine" id="cb1-6" title="6">(defparam x [<span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span>])</a>
+<a class="sourceLine" id="cb1-7" title="7">(defparam y [<span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span>])</a>
+<a class="sourceLine" id="cb1-8" title="8"></a>
+<a class="sourceLine" id="cb1-9" title="9">(<span class="op">+</span> x y)</a></code></pre></div>
+</div>
+<div id="lists" class="section level1">
+<h1 class="hasAnchor">
+<a href="#lists" class="anchor"></a>Lists</h1>
+<p>Even though lisp is already a list and indeed represented in R using multi-dimensional lists. We use a special token to denote that data should stored in the list not processed. This special token is the ’ before any list.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode lisp"><code class="sourceCode commonlisp"><a class="sourceLine" id="cb2-1" title="1">SluRp&gt; (defparam x '(<span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span>))</a>
+<a class="sourceLine" id="cb2-2" title="2">[[<span class="dv">1</span>]]</a>
+<a class="sourceLine" id="cb2-3" title="3">[<span class="dv">1</span>] <span class="dv">1</span></a>
+<a class="sourceLine" id="cb2-4" title="4"></a>
+<a class="sourceLine" id="cb2-5" title="5">[[<span class="dv">2</span>]]</a>
+<a class="sourceLine" id="cb2-6" title="6">[<span class="dv">1</span>] <span class="dv">2</span></a>
+<a class="sourceLine" id="cb2-7" title="7"></a>
+<a class="sourceLine" id="cb2-8" title="8">[[<span class="dv">3</span>]]</a>
+<a class="sourceLine" id="cb2-9" title="9">[<span class="dv">1</span>] <span class="dv">3</span></a>
+<a class="sourceLine" id="cb2-10" title="10"></a>
+<a class="sourceLine" id="cb2-11" title="11">[[<span class="dv">4</span>]]</a>
+<a class="sourceLine" id="cb2-12" title="12">[<span class="dv">1</span>] <span class="dv">4</span></a>
+<a class="sourceLine" id="cb2-13" title="13"></a>
+<a class="sourceLine" id="cb2-14" title="14"><span class="co">;; we can use keywords to specify the index of each element</span></a>
+<a class="sourceLine" id="cb2-15" title="15">SluRp&gt; (defparam x '(:one <span class="dv">1</span> :two <span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb2-16" title="16">$one</a>
+<a class="sourceLine" id="cb2-17" title="17">[<span class="dv">1</span>] <span class="dv">1</span></a>
+<a class="sourceLine" id="cb2-18" title="18"></a>
+<a class="sourceLine" id="cb2-19" title="19">$two</a>
+<a class="sourceLine" id="cb2-20" title="20">[<span class="dv">1</span>] <span class="dv">2</span></a></code></pre></div>
 </div>
   </div>
 
