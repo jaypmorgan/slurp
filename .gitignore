@@ -1,3 +1,5 @@
 /.slurp.history
 /README.html
 /.Rhistory
+inst/doc
+docs

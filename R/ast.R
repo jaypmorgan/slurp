@@ -1,6 +1,15 @@
 library(rlang)
 source("R/listprocessor.R")
 
+##' Tokenise the user input
+##'
+##' From the lisp syntax, tokenise and provide a AST representation using
+##' list of lists.
+##' @title ast
+##' @param input as a lisp-style string
+##' @return List of lists for each token
+##' @author Jay Morgan
+##' @export
 ast <- function(input) {
 
   filter_comments <- function(input) {
@@ -40,6 +49,13 @@ ast <- function(input) {
       }
     }
     return(list(start = start, end = end))
+  }
+
+  to_data_types <- function(input) {
+    input <- stringr::str_replace_all(input, "\\[", "(c ")
+    input <- stringr::str_replace_all(input, "\\#\\{", "(set ")
+    input <- stringr::str_replace_all(input, "\\{", "(list ")
+    input <- stringr::str_replace_all(input, "[\\]\\}]", ")")
   }
 
   to_vector <- function(tokens) {
@@ -109,12 +125,12 @@ ast <- function(input) {
         token <- out$contents
       }
 
-      if (typeof(token) != "list" && token == "[") {
-        out <- tokenize_function(tokens[i:length(tokens)], start_token = "[", end_token = "]")
-        i <- out$end + (i - 1)
-        token <- out$contents
-        token <- paste0("c(", paste(token, collapse=", "), ")")
-      }
+      ## if (typeof(token) != "list" && token == "[") {
+      ##   out <- tokenize_function(tokens[i:length(tokens)], start_token = "[", end_token = "]")
+      ##   i <- out$end + (i - 1)
+      ##   token <- out$contents
+      ##   token <- paste0("c(", paste(token, collapse=", "), ")")
+      ## }
 
       contents[[counter <- counter + 1]] <- token
       i <- i + 1
@@ -125,6 +141,7 @@ ast <- function(input) {
 
   tokenize <- function(input) {
     input <- filter_comments(input)
+    input <- to_data_types(input)
     if (is_fun(input)) {
       tokens <- stringr::str_match_all(input, fun_con)[[1]][,1]
       return(tokenize_function(tokens)$contents)

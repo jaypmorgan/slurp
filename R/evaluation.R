@@ -1,6 +1,15 @@
 source("R/listprocessor.R")
 source("R/functions.R")
 
+##' Evaluate the AST form
+##'
+##' Using the result of ast(...), evaluate and compile
+##' the expresions
+##' @title evaluate_ast
+##' @param ast_list the results of ast(...)
+##' @return the compiled R expression
+##' @author Jay Morgan
+##' @export
 evaluate_ast <- function(ast_list) {
 
   defun <- function(name, args, body) {

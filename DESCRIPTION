@@ -1,19 +1,23 @@
 Package: slurp
-Title: What the Package Does (One Line, Title Case)
+Title: Lisp-style Syntax for R
 Version: 0.0.0.9000
-Authors@R: 
-    person(given = "First",
-           family = "Last",
+Authors@R:
+    person(given = "Jay",
+           family = "Morgan",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+           email = "jay@morganwastaken.com",
+           comment = c(ORCID = "0000-0003-3719-362X"))
+Description: Provides lisp-style sytnax for the R programming language.
 License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
         license
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
-Author: First Last [aut, cre] (YOUR-ORCID-ID)
+Author: Jay Morgan [aut, cre] (0000-0003-3719-362X)
 Maintainer: First Last <first.last@example.com>
 Built: R 4.0.5; ; 2021-05-23 13:35:17 UTC; unix
+Suggests:
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
