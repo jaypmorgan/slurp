@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • slurp</title>
+<title>rest — rest • slurp</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,7 +46,8 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="rest — rest" />
+<meta property="og:description" content="Retrieve the rest of a list" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -66,7 +67,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -123,78 +124,41 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>rest</h1>
+    
+    <div class="hidden name"><code>rest.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>Retrieve the rest of a list</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'>rest</span><span class='op'>(</span><span class='va'>lst</span><span class='op'>)</span></pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="ast.html">ast()</a></code> </p>
-        </td>
-        <td><p>ast</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="cut.html">cut()</a></code> </p>
-        </td>
-        <td><p>cut</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="evaluate_ast.html">evaluate_ast()</a></code> </p>
-        </td>
-        <td><p>evaluate_ast</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="first.html">first()</a></code> </p>
-        </td>
-        <td><p>first</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="not.html">not()</a></code> </p>
-        </td>
-        <td><p></p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="nth.html">nth()</a></code> </p>
-        </td>
-        <td><p>nth</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="rest.html">rest()</a></code> </p>
-        </td>
-        <td><p>rest</p></td>
-      </tr>
-    </tbody>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>lst</th>
+      <td><p>the list to get everything but the first index</p></td>
+    </tr>
     </table>
-  </div>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>the list excluding the first index</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Retrieve the rest of the elements from a list type data structure.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Jay Morgan</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"></pre>
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
