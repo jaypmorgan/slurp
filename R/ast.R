@@ -53,7 +53,6 @@ ast <- function(input) {
 
   to_data_types <- function(input) {
     input <- stringr::str_replace_all(input, "\\[", "(c ")
-    input <- stringr::str_replace_all(input, "\\#\\{", "(set ")
     input <- stringr::str_replace_all(input, "\\{", "(list ")
     input <- stringr::str_replace_all(input, "[\\]\\}]", ")")
   }

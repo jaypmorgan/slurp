@@ -1,0 +1,56 @@
+---
+title: "02. Data Types"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{02. Data Types}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+Lisp is a list processor, but we're working with R, so we have access
+to more complex data-types. One of which is the vector or c()
+data-type for simple storage and vector arithmetic. We can create a
+vector with squared-brackets, e.g. [1 2 3] is translated to c(1, 2,
+3). This translation is necessary for when we're using functions that
+expect vector arguments:
+
+# Vectors
+
+```{lisp}
+[1 2 3 4] ;; creates a vector like c() in R
+
+(mean [1 2 3 4 5])
+
+;; perfect for vector arithmetic
+(defparam x [1 2 3 4 5])
+(defparam y [1 2 3 4 5])
+
+(+ x y)
+```
+
+# Lists
+
+Even though lisp is already a list and indeed represented in R using multi-dimensional lists. We use a special token to denote that data should stored in the list not processed. This special token is { }.
+
+```{lisp}
+SluRp> (defparam x {1 2 3 4})
+[[1]]
+[1] 1
+
+[[2]]
+[1] 2
+
+[[3]]
+[1] 3
+
+[[4]]
+[1] 4
+
+;; we can use keywords to specify the index of each element
+SluRp> (defparam x {:one 1 :two 2})
+$one
+[1] 1
+
+$two
+[1] 2
+```

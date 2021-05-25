@@ -1,10 +1,3 @@
-defun <- function(name, args, body) {
-  out <- paste(name, "<- function(", paste(args, collapse = ", "), ") {\n")
-  body <- stringr::str_replace_all(body, "`", "expr")
-  out <- paste(out, compile_function(body[[1]], body[2:length(body)]), "\n}")
-  return(out)
-}
-
 progn <- function(args) {
   out <- paste(args, collapse = "\n")
   return(out)
@@ -44,8 +37,22 @@ or <- function(...) {
   return(args[[length(args)]])
 }
 
-not <- function(arg) {
-  return(!(arg))
+##' invert a bool value, i.e. TRUE => FALSE, FALSE => TRUE
+##'
+##' Instead of the traditional inversion of boolean values using
+##' !(bool), here we provide a more lispy style inversion function called 'not'.
+##' This can be applied to boolean functions as a simple function call.
+##' @title
+##' @param bool The bool to invert `TRUE/FALSE`
+##' @return
+##' @author Jay Morgan
+##' @examples
+##' (not TRUE)
+##' (not FALSE)
+##' (not (== 1 1))
+##' @export
+not <- function(bool) {
+  return(!(bool))
 }
 
 thread_first <- function(...) {

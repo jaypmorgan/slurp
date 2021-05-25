@@ -1,8 +1,10 @@
 <p align="center">
-<img src="vignettes/logo.png"/>
+<img src="man/figures/logo.png"/>
 
 *Statistical Lisp in R*
 </p>
+
+![docs](https://img.shields.io/badge/docs-latest-blue)
 
 Implemention of Lisp-style sytnax and language design for the `R`
 programming language. Code written in SluRp will be translated to `R`

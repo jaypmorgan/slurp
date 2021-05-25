@@ -1,13 +1,71 @@
+##' Retrieve the first element from list
+##'
+##' Retrieve and return the first element from a list. This lispy
+##' style function uses indexing under the hood but exposes the
+##' process as a function call.
+##' @title first
+##' @param lst the list to which the first element will be returned
+##' @return the first element
+##' @examples
+##' (first {1 2 3}) => 1
+##' (first {{1 2} {3 4}}) => list(1, 2)
+##' @author Jay Morgan
+##' @export
 first <- function(lst) {
   return(lst[[1]])
 }
 
+##' Retrieve the rest of a list
+##'
+##' Retrieve the rest of the elements from a list type data structure.
+##' @title rest
+##' @param lst the list to get everything but the first index
+##' @return the list excluding the first index
+##' @examples
+##' (rest {1 2 3 4}) => list(2, 3, 4)
+##' (rest {{1 2} {3 4}}) => list(3, 4)
+##' @author Jay Morgan
+##' @export
 rest <- function(lst) {
   return(lst[c(-1)])
 }
 
+##' Return the nth element from a list
+##'
+##' Retrieve the nth element of the list via a function call instead of indexing
+##' @title nth
+##' @param lst The list to which the nth element will be returned
+##' @param n the index of the element to retrieve
+##' @return the nth element
+##' @examples
+##' (nth {1 2 3} 1) => 1
+##' (nth {{1 2} {3 4}} 2) => list(3, 4)
+##' @author Jay Morgan
 nth <- function(lst, n) {
   return(lst[[n]])
+}
+
+##' Cut or slice a list data type from start index to end index
+##'
+##' Retrieve elements from start index to end index. If start is not supplied, it will be assumed to be the 1st index. If end is not supplied then, all elements up to the end will be returned.
+##' @title cut
+##' @param lst the list from which the elements are returned
+##' @param start the start index (default: 1st index)
+##' @param end the end index (default: length of list)
+##' @return all elements within the specified range
+##' @examples
+##' (cut {1 2 3 4} 1 2) => list(1, 2)
+##' (cut {1 2 3 4} :start 2) => list(2, 3, 4)
+##' (cut {1 2 3 4} :end 3) => list(1, 2, 3)
+##' @author Jay Morgan
+cut <- function(lst, start = NULL, end = NULL) {
+  if (is.null(start)) {
+    start <- 1
+  }
+  if (is.null(end)) {
+    end <- length(lst)
+  }
+  return(lst[start:end])
 }
 
 find_last <- function(lst) {
