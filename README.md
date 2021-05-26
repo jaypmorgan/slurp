@@ -4,7 +4,7 @@
 *Statistical Lisp in R*
 </p>
 
-![docs](https://img.shields.io/badge/docs-latest-blue)
+[![docs](https://img.shields.io/badge/docs-latest-blue)](https://jaypmorgan.github.io/slurp/index.html)
 
 Implemention of Lisp-style sytnax and language design for the `R`
 programming language. Code written in SluRp will be translated to `R`
