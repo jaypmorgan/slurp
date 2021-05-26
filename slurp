@@ -4,14 +4,25 @@ options(warn = -1)
 
 args <- commandArgs(trailingOnly = TRUE)
 
+getScriptPath <- function(){
+    cmd.args <- commandArgs()
+    m <- regexpr("(?<=^--file=).+", cmd.args, perl=TRUE)
+    script.dir <- dirname(regmatches(cmd.args, m))
+    if(length(script.dir) == 0) stop("can't determine script dir: please call the script with Rscript")
+    if(length(script.dir) > 1) stop("can't determine script dir: more than one '--file' argument detected")
+    return(script.dir)
+}
+
+d <- getScriptPath()
+
 if (length(args) == 0) {
   # repl mode
-  source("R/repl.R")
+  source(file.path(d, "/R/repl.R"))
   repl()
 } else {
   # source code mode
-  source("R/ast.R")
-  source("R/evaluation.R")
+  source("R/ast.R", chdir = TRUE)
+  source("R/evaluation.R", chdir = TRUE)
   source_code <- paste(readLines(args[[1]]), collapse = "\n")
   source_code <- stringr::str_remove_all(source_code, ";;.*")
   source_code <- stringi::stri_replace_all(source_code, regex = "\\s\\s\\s", " ")

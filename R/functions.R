@@ -42,7 +42,7 @@ or <- function(...) {
 ##' Instead of the traditional inversion of boolean values using
 ##' !(bool), here we provide a more lispy style inversion function called 'not'.
 ##' This can be applied to boolean functions as a simple function call.
-##' @title
+##' @title not
 ##' @param bool The bool to invert `TRUE/FALSE`
 ##' @return
 ##' @author Jay Morgan
