@@ -18,7 +18,16 @@ repl <- function() {
 
   lread <- function() {
     cat(prompt)
-    answer <- readLines("stdin", n = 1)
+    lines <- c()
+    while (TRUE) {
+        line <- readLines("stdin", n = 1)
+        if (length(line) == 0 || line == "") {
+          break
+        } else {
+          lines <- c(lines, line)
+        }
+    }
+    answer <- paste0(lines, collapse = " ")
     return(answer)
   }
 
