@@ -1,0 +1,8 @@
+(library devtools)
+(library pkgdown)
+
+(defun publish ()
+  (pkgdown::deploy_to_branch :examples FALSE))
+
+(defun new-post (name)
+  (usethis::use_vignette name))

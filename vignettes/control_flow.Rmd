@@ -1,0 +1,20 @@
+---
+title: "Control Flow"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Control Flow}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# If
+
+```{lisp}
+;;(if (predicate)
+;;    (do this if true...)
+;;  (do this if false...))
+
+(if (TRUE)
+    (print "This is true")
+  (print "This is false")) ;; will always print "This is true"
+```
