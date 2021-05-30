@@ -1,8 +1,8 @@
 ---
-title: "Control Flow"
+title: "03. Control Flow"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Control Flow}
+  %\VignetteIndexEntry{03. Control Flow}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
