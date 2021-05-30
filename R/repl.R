@@ -19,7 +19,6 @@ repl <- function() {
   lread <- function() {
     is_complete <- function(input) {
       input <- paste0(input, collapse = "")
-      print(input)
       n_starts <- stringr::str_count(input, "\\(")
       n_ends <- stringr::str_count(input, "\\)")
       return(n_starts == n_ends)
