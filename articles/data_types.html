@@ -46,7 +46,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -61,6 +61,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/control_flow.html">Control Flow</a>
+    </li>
+    <li>
       <a href="../articles/data_types.html">02. Data Types</a>
     </li>
     <li>
@@ -79,8 +82,7 @@
 
       
 
-      </header><link href="data_types_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
-<script src="data_types_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>02. Data Types</h1>
@@ -131,6 +133,20 @@
 <a class="sourceLine" id="cb2-18" title="18"></a>
 <a class="sourceLine" id="cb2-19" title="19">$two</a>
 <a class="sourceLine" id="cb2-20" title="20">[<span class="dv">1</span>] <span class="dv">2</span></a></code></pre></div>
+</div>
+<div id="matrices" class="section level1">
+<h1 class="hasAnchor">
+<a href="#matrices" class="anchor"></a>Matrices</h1>
+<div class="sourceCode" id="cb3"><pre class="sourceCode lisp"><code class="sourceCode commonlisp"><a class="sourceLine" id="cb3-1" title="1">(defparam x (<span class="kw">array</span> [[<span class="dv">1</span> <span class="dv">2</span>] [<span class="dv">2</span> <span class="dv">4</span>]] :dim [<span class="dv">2</span> <span class="dv">2</span>]))</a>
+<a class="sourceLine" id="cb3-2" title="2">(defparam y (<span class="kw">array</span> [[<span class="dv">1</span> <span class="dv">3</span>] [<span class="dv">3</span> <span class="dv">1</span>]] :dim [<span class="dv">2</span> <span class="dv">2</span>]))</a>
+<a class="sourceLine" id="cb3-3" title="3"></a>
+<a class="sourceLine" id="cb3-4" title="4">(<span class="op">*</span> x y)</a>
+<a class="sourceLine" id="cb3-5" title="5"></a>
+<a class="sourceLine" id="cb3-6" title="6">(<span class="kw">t</span> x) <span class="co">;; transpose x</span></a>
+<a class="sourceLine" id="cb3-7" title="7"></a>
+<a class="sourceLine" id="cb3-8" title="8">(diag x)</a>
+<a class="sourceLine" id="cb3-9" title="9"></a>
+<a class="sourceLine" id="cb3-10" title="10">(eigen x)</a></code></pre></div>
 </div>
   </div>
 
