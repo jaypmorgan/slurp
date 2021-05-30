@@ -17,14 +17,21 @@ repl <- function() {
   history_file <- ".slurp.history"
 
   lread <- function() {
+    is_complete <- function(input) {
+      input <- paste0(input, collapse = "")
+      print(input)
+      n_starts <- stringr::str_count(input, "\\(")
+      n_ends <- stringr::str_count(input, "\\)")
+      return(n_starts == n_ends)
+    }
+
     cat(prompt)
     lines <- c()
     while (TRUE) {
         line <- readLines("stdin", n = 1)
-        if (length(line) == 0 || line == "") {
+        lines <- c(lines, line)
+        if (is_complete(lines)) {
           break
-        } else {
-          lines <- c(lines, line)
         }
     }
     answer <- paste0(lines, collapse = " ")

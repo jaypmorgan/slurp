@@ -1,3 +1,6 @@
+library(base)
+library(rlang)
+
 getScriptPath <- function(){
     cmd.args <- commandArgs()
     m <- regexpr("(?<=^--file=).+", cmd.args, perl=TRUE)
@@ -27,7 +30,14 @@ evaluate_ast <- function(ast_list) {
     out <- paste(name, "<- function(", paste(args, collapse = ", "), ") {\n")
     body <- stringr::str_replace_all(body, "`", "expr")
     out <- paste(out, body, "\n}")
-    ## out <- paste(out, compile_function(body[[1]], body[2:length(body)]), "\n}")
+    return(out)
+  }
+
+  if_control <- function(expr, body1, body2) {
+    out <- paste0("if (", expr, ") {\n  ", body1, "\n}")
+    if (body2 != "") {
+      out <- paste0(out, " else {\n  ", body2, "\n}")
+    }
     return(out)
   }
 
@@ -97,6 +107,15 @@ evaluate_ast <- function(ast_list) {
         body <- args[[3]]
       }
       out <- defun(args[[1]], args[[2]], body)
+    } else if (func == "if") {
+      expr <- args[[1]]
+      body1 <- args[[2]]
+      body2 <- ""
+      if (length(args) > 2) {
+        body2 <- args[[3]]
+      }
+      out <- if_control(expr, body1, body2)
+      print(out)
     } else {
       out <- paste0(func, "(", keywords_to_parameter(paste(args, collapse=",")), ")")
     }
@@ -122,7 +141,8 @@ evaluate_ast <- function(ast_list) {
     }
 
     for (item in args) {
-      if (typeof(item) == "list") {
+      # TODO: there should be a better way of saying this list is referencing a function call
+      if (is_list(item) && (item[[1]] != "TRUE" && item[[1]] != "FALSE")) {
         evaluated_args[[counter <- counter + 1]] <- run_evaluation(item)
       } else {
         evaluated_args[[counter <- counter + 1]] <- item # evaluate_directly(item)
