@@ -17,4 +17,12 @@ vignette: >
 (if (TRUE)
     (print "This is true")
   (print "This is false")) ;; will always print "This is true"
+
+;; use progn for multiline statements
+(if (TRUE)
+    (progn
+      (print "Test1")
+      (print "Test2"))
+  (print "No tests"))
+;; this prints Test 1 then Test 2 and returns Test2
 ```
