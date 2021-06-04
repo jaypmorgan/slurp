@@ -1,8 +1,3 @@
-progn <- function(args) {
-  out <- paste(args, collapse = "\n")
-  return(out)
-}
-
 falsey <- function(arg) {
   if (is.null(arg)
       || is.na(arg)

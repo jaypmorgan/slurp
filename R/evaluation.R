@@ -92,6 +92,8 @@ evaluate_ast <- function(ast_list) {
 
     if (is_infix(func)) {
       out <- paste(args, collapse = func)
+    } else if (func == "progn") {
+      out <- paste(args, collapse = "\n")
     } else if (func == "defparam") {
       out <- paste(args[[1]], "<-", args[[2]])
     } else if (func == "lambda") {

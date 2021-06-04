@@ -9,6 +9,23 @@
 
 (defun print-my-name (name) (print (paste "Hello," name)))
 
+(if (TRUE)
+    (progn
+      (print "Test")
+      (print "test2"))
+  (print "got here"))
+
+(if (FALSE)
+    (progn
+      (print "Test")
+      (print "test2"))
+  (print "got here"))
+
+(defun print-my-name2 (name)
+  (print name))
+
+(print-my-name "SluRp")
+
 (print (my-cool-function 5 10 10))
 
 (defparam x 2)
@@ -25,8 +42,6 @@
 (print weird-name?)
 
 (+ 1 2 3 4 5)
-
-(print-my-name "SluRp")
 
 ;; Language lasagnes
 
