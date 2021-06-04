@@ -15,16 +15,18 @@ getScriptPath <- function(){
 
 d <- getScriptPath()
 
+source(file.path(d, "/R/repl.R"))
+source(file.path(d, "R/ast.R"))
+source(file.path(d, "R/evaluation.R"))
+source(file.path(d, "R/core.R"))
+
 if (length(args) == 0) {
   # repl mode
-  source(file.path(d, "/R/repl.R"))
   repl()
 } else {
   # source code mode
-  source("R/ast.R", chdir = TRUE)
-  source("R/evaluation.R", chdir = TRUE)
   source_code <- paste(readLines(args[[1]]), collapse = "\n")
-  source_code <- stringr::str_remove_all(source_code, ";;.*")
+  source_code <- strip_comments(source_code)
   source_code <- stringi::stri_replace_all(source_code, regex = "\\s\\s\\s", " ")
   source_code <- stringr::str_match_all(source_code, "(\\(.*\\))")[[1]][,1]
   for (statement in source_code) {

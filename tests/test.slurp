@@ -11,6 +11,7 @@
 
 (print (my-cool-function 5 10 10))
 
+(defparam x 2)
 (print (* x 2))
 
 (print (mean (^ x 10)))

@@ -11,6 +11,7 @@ d <- getScriptPath()
 
 source(file.path(d, "R/ast.R"))
 source(file.path(d, "R/evaluation.R"))
+source(file.path(d, "R/core.R"))
 
 repl <- function() {
   prompt <- "SluRp> "
@@ -27,11 +28,12 @@ repl <- function() {
     cat(prompt)
     lines <- c()
     while (TRUE) {
-        line <- readLines("stdin", n = 1)
-        lines <- c(lines, line)
-        if (is_complete(lines)) {
-          break
-        }
+      line <- readLines("stdin", n = 1)
+      line <- strip_comments(line)
+      lines <- c(lines, line)
+      if (is_complete(lines)) {
+        break
+      }
     }
     answer <- paste0(lines, collapse = " ")
     return(answer)

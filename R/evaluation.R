@@ -115,7 +115,6 @@ evaluate_ast <- function(ast_list) {
         body2 <- args[[3]]
       }
       out <- if_control(expr, body1, body2)
-      print(out)
     } else {
       out <- paste0(func, "(", keywords_to_parameter(paste(args, collapse=",")), ")")
     }
