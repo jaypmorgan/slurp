@@ -1,3 +1,15 @@
+getScriptPath <- function(){
+    cmd.args <- commandArgs()
+    m <- regexpr("(?<=^--file=).+", cmd.args, perl=TRUE)
+    script.dir <- dirname(regmatches(cmd.args, m))
+    if(length(script.dir) == 0) stop("can't determine script dir: please call the script with Rscript")
+    if(length(script.dir) > 1) stop("can't determine script dir: more than one '--file' argument detected")
+    return(script.dir)
+}
+
+d <- getScriptPath()
+source(file.path(d, "R/functions.R"))
+
 strip_comments <- function(input) {
   stringr::str_remove_all(input, ";;.*")
 }
@@ -45,10 +57,19 @@ if_c <- function(args) {
   return(out)
 }
 
-while_c <- function(args) {
-  ## do something
+when_c <- function(args) {
+  expr <- first(args)
+  body <- rest(args)
+  paste0("if (", expr, ") {\n  ", paste0(body, collapse = "\n  "), "\n}")
 }
 
-unless <- function(args) {
-  ## do something
+unless_c <- function(args) {
+  expr <- first(args)
+  body <- rest(args)
+  paste0("if (!", expr, ") {\n  ", paste0(body, collapse = "\n  "), "\n}")
+}
+
+cond_c <- function(args) {
+  ## already compiled just return
+  return(args)
 }

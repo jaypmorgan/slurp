@@ -7,6 +7,8 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+Source for inspiration: https://riptutorial.com/common-lisp/example/11082/conditional-constructs
+
 # If
 
 ```{lisp}
@@ -25,4 +27,33 @@ vignette: >
       (print "Test2"))
   (print "No tests"))
 ;; this prints Test 1 then Test 2 and returns Test2
+```
+
+# When
+
+```{lisp}
+;; short hand for if with only one path
+(when (> 3 4)
+  (print "I got here")
+  "Three is bigger than four")
+;; prints "I got here" and returns "Three is bigger than four"
+```
+
+# Unless
+
+```{lisp}
+;; The inverse of when, runs body only when condition is false
+(unless (> 3 4)
+  "Three is not bigger than four!")
+;; Returns "Three is not bigger than four!"
+```
+
+# Cond
+
+```{lisp}
+;; run multiple conditions in one body
+(cond ((> 3 4) "Three is bigger than four!")
+      ((> 3 3) "Three is bigger than three!")
+      ((> 3 2) "Three is bigger than two!"))
+;; Returns "Three is bigger than two!"
 ```

@@ -68,8 +68,8 @@ evaluate_ast <- function(ast_list) {
     return(clean_args)
   }
 
-  builtin_keywords <- c("progn", "defparam", "lambda", "defun", "if", "while", "unless")
-  builtin_mappings <- c(progn, defparam, lambda, defun, if_c, while_c, unless)
+  builtin_keywords <- c("progn", "defparam", "lambda", "defun", "if", "when", "unless", "cond")
+  builtin_mappings <- c(progn, defparam, lambda, defun, if_c, when_c, unless_c, cond_c)
 
   compile_function <- function(func, passed_args) {
     func <- standardise_name(func)
@@ -105,6 +105,13 @@ evaluate_ast <- function(ast_list) {
     if (func %in% c("lambda")) {
       evaluated_args[[counter <- counter + 1]] <- args[[1]]
       args <- args[c(-1)]
+    }
+
+    if (func %in% c("cond")) {
+      for (idx in 1:length(args)) {
+        item <- args[[idx]]
+        args[[idx]] <- c("if", item[1], item[2])
+      }
     }
 
     for (item in args) {
