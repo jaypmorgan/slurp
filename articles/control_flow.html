@@ -95,6 +95,7 @@
 
     
     
+<p>Source for inspiration: <a href="https://riptutorial.com/common-lisp/example/11082/conditional-constructs" class="uri">https://riptutorial.com/common-lisp/example/11082/conditional-constructs</a></p>
 <div id="if" class="section level1">
 <h1 class="hasAnchor">
 <a href="#if" class="anchor"></a>If</h1>
@@ -113,6 +114,32 @@
 <a class="sourceLine" id="cb1-13" title="13">      (<span class="kw">print</span> <span class="st">"Test2"</span>))</a>
 <a class="sourceLine" id="cb1-14" title="14">  (<span class="kw">print</span> <span class="st">"No tests"</span>))</a>
 <a class="sourceLine" id="cb1-15" title="15"><span class="co">;; this prints Test 1 then Test 2 and returns Test2</span></a></code></pre></div>
+</div>
+<div id="when" class="section level1">
+<h1 class="hasAnchor">
+<a href="#when" class="anchor"></a>When</h1>
+<div class="sourceCode" id="cb2"><pre class="sourceCode lisp"><code class="sourceCode commonlisp"><a class="sourceLine" id="cb2-1" title="1"><span class="co">;; short hand for if with only one path</span></a>
+<a class="sourceLine" id="cb2-2" title="2">(<span class="kw">when</span> (<span class="op">&gt;</span> <span class="dv">3</span> <span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb2-3" title="3">  (<span class="kw">print</span> <span class="st">"I got here"</span>)</a>
+<a class="sourceLine" id="cb2-4" title="4">  <span class="st">"Three is bigger than four"</span>)</a>
+<a class="sourceLine" id="cb2-5" title="5"><span class="co">;; prints "I got here" and returns "Three is bigger than four"</span></a></code></pre></div>
+</div>
+<div id="unless" class="section level1">
+<h1 class="hasAnchor">
+<a href="#unless" class="anchor"></a>Unless</h1>
+<div class="sourceCode" id="cb3"><pre class="sourceCode lisp"><code class="sourceCode commonlisp"><a class="sourceLine" id="cb3-1" title="1"><span class="co">;; The inverse of when, runs body only when condition is false</span></a>
+<a class="sourceLine" id="cb3-2" title="2">(<span class="kw">unless</span> (<span class="op">&gt;</span> <span class="dv">3</span> <span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb3-3" title="3">  <span class="st">"Three is not bigger than four!"</span>)</a>
+<a class="sourceLine" id="cb3-4" title="4"><span class="co">;; Returns "Three is not bigger than four!"</span></a></code></pre></div>
+</div>
+<div id="cond" class="section level1">
+<h1 class="hasAnchor">
+<a href="#cond" class="anchor"></a>Cond</h1>
+<div class="sourceCode" id="cb4"><pre class="sourceCode lisp"><code class="sourceCode commonlisp"><a class="sourceLine" id="cb4-1" title="1"><span class="co">;; run multiple conditions in one body</span></a>
+<a class="sourceLine" id="cb4-2" title="2">(<span class="kw">cond</span> ((<span class="op">&gt;</span> <span class="dv">3</span> <span class="dv">4</span>) <span class="st">"Three is bigger than four!"</span>)</a>
+<a class="sourceLine" id="cb4-3" title="3">      ((<span class="op">&gt;</span> <span class="dv">3</span> <span class="dv">3</span>) <span class="st">"Three is bigger than three!"</span>)</a>
+<a class="sourceLine" id="cb4-4" title="4">      ((<span class="op">&gt;</span> <span class="dv">3</span> <span class="dv">2</span>) <span class="st">"Three is bigger than two!"</span>))</a>
+<a class="sourceLine" id="cb4-5" title="5"><span class="co">;; Returns "Three is bigger than two!"</span></a></code></pre></div>
 </div>
   </div>
 
