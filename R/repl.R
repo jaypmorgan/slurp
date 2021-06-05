@@ -60,10 +60,9 @@ repl <- function() {
   }
 
   lprint <- function(output) {
-    ## if (!is.null(output) && output != "") {
-    ##   print(output)
-    ## }
-    print(output)
+    if (!is.na(output) && !is.null(output) && output != "") {
+      print(output)
+    }
   }
 
   lrep <- function() {}
