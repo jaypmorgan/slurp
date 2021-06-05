@@ -1,3 +1,54 @@
 strip_comments <- function(input) {
   stringr::str_remove_all(input, ";;.*")
 }
+
+progn <- function(args) {
+  paste(args, collapse = "\n")
+}
+
+defparam <- function(args) {
+  paste(args[[1]], "<-", args[[2]])
+}
+
+lambda <- function(args) {
+  paste0("function(",
+         paste(args[[1]], collapse = ", "), ") {\n",
+         paste(args[[2:length(args)]], collapse = "\n"),
+         "\n}")
+}
+
+defun <- function(args) {
+  has_docstring <- stringr::str_detect(args[[3]], "^\".*\"")
+  if (has_docstring) {
+    docstring <- stringr::str_remove_all(args[[3]], "\"")
+    body <- paste("#'", docstring, "\n", args[[4]])
+  } else {
+    body <- args[[3]]
+  }
+  out <- paste(args[[1]], "<- function(", paste(args[[2]], collapse = ", "), ") {\n")
+  body <- stringr::str_replace_all(body, "`", "expr")
+  out <- paste(out, body, "\n}")
+  return(out)
+}
+
+if_c <- function(args) {
+  expr <- args[[1]]
+  body1 <- args[[2]]
+  body2 <- ""
+  if (length(args) > 2) {
+    body2 <- args[[3]]
+  }
+  out <- paste0("if (", expr, ") {\n  ", body1, "\n}")
+  if (body2 != "") {
+    out <- paste0(out, " else {\n  ", body2, "\n}")
+  }
+  return(out)
+}
+
+while_c <- function(args) {
+  ## do something
+}
+
+unless <- function(args) {
+  ## do something
+}

@@ -26,21 +26,6 @@ source(file.path(d, "R/functions.R"))
 ##' @export
 evaluate_ast <- function(ast_list) {
 
-  defun <- function(name, args, body) {
-    out <- paste(name, "<- function(", paste(args, collapse = ", "), ") {\n")
-    body <- stringr::str_replace_all(body, "`", "expr")
-    out <- paste(out, body, "\n}")
-    return(out)
-  }
-
-  if_control <- function(expr, body1, body2) {
-    out <- paste0("if (", expr, ") {\n  ", body1, "\n}")
-    if (body2 != "") {
-      out <- paste0(out, " else {\n  ", body2, "\n}")
-    }
-    return(out)
-  }
-
   is_infix <- function(fun) {
     infix_ops <- c("+", "-", "*", "/", "%%", "^", ">", "<", ">=", "<=", "==")
     if (fun %in% infix_ops) {
@@ -83,6 +68,9 @@ evaluate_ast <- function(ast_list) {
     return(clean_args)
   }
 
+  builtin_keywords <- c("progn", "defparam", "lambda", "defun", "if", "while", "unless")
+  builtin_mappings <- c(progn, defparam, lambda, defun, if_c, while_c, unless)
+
   compile_function <- function(func, passed_args) {
     func <- standardise_name(func)
     args <- list()
@@ -92,31 +80,9 @@ evaluate_ast <- function(ast_list) {
 
     if (is_infix(func)) {
       out <- paste(args, collapse = func)
-    } else if (func == "progn") {
-      out <- paste(args, collapse = "\n")
-    } else if (func == "defparam") {
-      out <- paste(args[[1]], "<-", args[[2]])
-    } else if (func == "lambda") {
-      out <- paste0("function(", paste(args[[1]], collapse = ", "), ") {\n",
-                    paste(args[[2:length(args)]], collapse = "\n"),
-                    "\n}")
-    } else if (func == "defun") {
-      has_docstring <- stringr::str_detect(args[[3]], "^\".*\"")
-      if (has_docstring) {
-        docstring <- stringr::str_remove_all(args[[3]], "\"")
-        body <- paste("#'", docstring, "\n", args[[4]])
-      } else {
-        body <- args[[3]]
-      }
-      out <- defun(args[[1]], args[[2]], body)
-    } else if (func == "if") {
-      expr <- args[[1]]
-      body1 <- args[[2]]
-      body2 <- ""
-      if (length(args) > 2) {
-        body2 <- args[[3]]
-      }
-      out <- if_control(expr, body1, body2)
+    } else if (func %in% builtin_keywords) {
+      fn_idx <- which(func == builtin_keywords)
+      out <- builtin_mappings[[fn_idx]](args)
     } else {
       out <- paste0(func, "(", keywords_to_parameter(paste(args, collapse=",")), ")")
     }

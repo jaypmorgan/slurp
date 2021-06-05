@@ -41,6 +41,8 @@
 (defparam weird-name? TRUE)
 (print weird-name?)
 
+(rlang::this)
+
 (+ 1 2 3 4 5)
 
 ;; Language lasagnes
