@@ -1,13 +1,20 @@
 (library tidyverse)
 (library R6)
+(library reticulate)
 
+;; S6 Object
 (defparam Accumulator
   (R6Class "Accumulator" {:sum 0
                           :add (lambda (:x 0)
                                  (defparam self$sum (+ x self$sum))
                                  (invisible self))}))
 
-(defparam x ;; this is a comment
+;; Create a new accumulator object and try to add 10 to the initial
+;; value (which should be 0)
+(defparam x (Accumulator$new))
+(x$add 10)
+
+(defparam x ;; this is a comment inside a function
   (rnorm 100 0 1))
 
 (defun my-cool-function (num-samples mean sd)
@@ -15,6 +22,10 @@
   (rnorm num-samples :mean mean :sd sd))
 
 (defun print-my-name (name) (print (paste "Hello," name)))
+(print-my-name "SluRp")
+
+(defparam weird-name? TRUE)
+(print weird-name?)
 
 (if (TRUE)
     (progn
@@ -31,8 +42,6 @@
 (defun print-my-name2 (name)
   (print name))
 
-(print-my-name "SluRp")
-
 (print (my-cool-function 5 10 10))
 
 (defparam x 2)
@@ -45,17 +54,9 @@
 (print
  (map [1 2 3 4 5] (lambda (x) (* x 10))))
 
-(defparam weird-name? TRUE)
-(print weird-name?)
-
-(rlang::this)
-
 (+ 1 2 3 4 5)
 
 ;; Language lasagnes
-
-(library reticulate)
-
 (defparam np (import "numpy"))
 (defparam torch (import "torch"))
 (defparam nn (import "torch.nn"))
