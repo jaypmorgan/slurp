@@ -196,27 +196,3 @@ What programming stack do you use? Answer: all of them:
 ;; print the predictions to stdout
 (print preds)
 ```
-
-
-## Things to do:
-
-- [X] Lisp tokenisation
-- [X] Basic function application
-- [X] Vector notation
-- [X] Nested function application
-- [X] Function definitions
-- [X] Lambdas
-- [X] Variable assignments
-- [ ] Sets and Lists
-- [X] Keyword arguments
-- [ ] Macros
-- [ ] Pre-installed macros such as threading
-
-### Functions to implement
-
-- [ ] Cons
-- [ ] Listp
-- [ ] Atomp
-- [ ] Better evaluation - special symbols evaluate to themselves
-- [ ] Better tokenisation -- should take into account the end of the list to allow scripts to run
-- [ ] Quote/Eval
