@@ -1,4 +1,11 @@
 (library tidyverse)
+(library R6)
+
+(defparam Accumulator
+  (R6Class "Accumulator" {:sum 0
+                          :add (lambda (:x 0)
+                                 (defparam self$sum (+ x self$sum))
+                                 (invisible self))}))
 
 (defparam x ;; this is a comment
   (rnorm 100 0 1))

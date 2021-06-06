@@ -25,7 +25,7 @@ defparam <- function(args) {
 lambda <- function(args) {
   paste0("function(",
          paste(args[[1]], collapse = ", "), ") {\n",
-         paste(args[[2:length(args)]], collapse = "\n"),
+         paste(args[2:length(args)], collapse = "\n"),
          "\n}")
 }
 

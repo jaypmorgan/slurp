@@ -1,0 +1,15 @@
+---
+title: "Deep Learning with Torch"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Deep Learning with Torch}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+What you will see:
+- Using existing R libraries in SluRp
+- Creating S6 class objects (in this case a neural network)
+- Loading data
+- For loop construction
+- Plotting the results

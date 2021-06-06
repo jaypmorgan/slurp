@@ -55,8 +55,9 @@ evaluate_ast <- function(ast_list) {
   }
 
   standardise_name <- function(func) {
+    if (func == "<-") { return(func) }
     func <- stringr::str_replace_all(func, "->", "_to_")
-    func <- stringr::str_replace_all(func, "-", "_")
+    func <- stringr::str_replace_all(func, "(?<!<)-", "_")
     func <- stringr::str_replace_all(func, "\\?", "_p")
   }
 
@@ -119,7 +120,7 @@ evaluate_ast <- function(ast_list) {
       if (is_list(item) && (item[[1]] != "TRUE" && item[[1]] != "FALSE")) {
         evaluated_args[[counter <- counter + 1]] <- run_evaluation(item)
       } else {
-        evaluated_args[[counter <- counter + 1]] <- item # evaluate_directly(item)
+        evaluated_args[[counter <- counter + 1]] <- item
       }
     }
 
