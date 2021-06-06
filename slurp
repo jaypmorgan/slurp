@@ -13,6 +13,10 @@ getScriptPath <- function(){
     return(script.dir)
 }
 
+if (file.exists(".Rprofile")) {
+  source(".Rprofile")
+}
+
 d <- getScriptPath()
 
 source(file.path(d, "/R/repl.R"))
