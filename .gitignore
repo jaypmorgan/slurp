@@ -10,3 +10,4 @@ docs
 /tests/renv/
 /tests/*.gz
 /R/*.gz
+tests/*-ubyte

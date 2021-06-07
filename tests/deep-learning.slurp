@@ -1,14 +1,33 @@
-;; (install.packages ["tidyverse" "torch" "torchvision" "torchdatasets"])
+;; Using slurp to do some Deep Learning
+;;
+;; This example is perhaps a lot more verbose than what you would
+;; normally see as I want to use this opportunity to demonstrate how
+;; to do things in slurp, even if there are quicker and better ways to
+;; do them generally. For example, instead of using torchvision and
+;; torchdatasets to handle the downloading and pre-processing of the
+;; MNIST dataset, we shall do this ourselves. The functions to
+;; accomplish this task are long, but it shows the syntactical
+;; structure of slurp.
+;;
+;; If you wish to run this example for yourself, you will need to
+;; ensure you have installed the tidyverse set of pacakges, as well as
+;; torch:
+;; (install.packages ["tidyverse" "torch"])
 
-(library tidyverse)
+;; ---------------------------------------------------------------------
+;; Load the libraries and set out the learning parameters
+
 (library torch)
-(library torchvision)
-(library torchdatasets)
+(library tidyverse)
 
-(defparam batch-size 64)
-          device (if (cuda-is-available)
-                     (torch-device "cuda")
-                   "cpu"))
+;; defparam can accept many variable/value assignments in one call
+;; here we are setting our the parameters of the learning process.
+(defparam batch-size 64
+  epochs 100
+  learning-rate 0.005
+  device (if (cuda-is-available)
+             (torch-device "cuda")
+           "cpu"))
 
 ;; Create a transformation function from the image to something the
 ;; neural network can use.
@@ -16,6 +35,47 @@
   (%>% ;; use magrittr as threading marco like feature :-)
    (transform-to-tensor)
    (.$to dev)))
+
+;; ----------------------------------------------------------------------
+;; Download and prepare the datasets for the model
+
+(defun prepare-data ()
+  "Uncompress the datasets"
+  (defparam files (Sys.glob "*.gz"))
+  (map files (lambda (file) (system (paste "gunzip" file)))))
+
+(defun download-data (subset)
+  "download the mnist images and labels for subset = train or test"
+  (unless (== subset "train")
+    (defparam subset "t10k"))
+  (defparam base-name "http://yann.lecun.com/exdb/mnist/"
+            label-name "labels-idx1-ubyte.gz"
+            image-name "images-idx3-ubyte.gz"
+            request "curl -O ")
+  (system (paste0 request base-name subset "-" image-name))
+  (system (paste0 request base-name subset "-" label-name)))
+
+(defun download-all-data ()
+  "Get and uncompress all data"
+  (download-data "train")
+  (download-data "test")
+  (prepare-data))
+
+(defun read-mnist (filepath)
+  "Load an mnist data from IDX format"
+  (defparam f (file filepath "rb")
+    ;; read the first 4 values in file that correspond to:
+    ;; magicnumber, number of digits, dims of x, dims of y
+    file-params (readBin f (integer) :n 4 :endian "big")
+    n-samples (nth file-params 2)
+    n-rows (nth file-params 3)
+    n-cols (nth file-params 4))
+  ;; read the data n-samples times to get each digits from the dataset
+  ;; and finally concatenate into a 3-dimensional array
+  (%>%
+    (sapply (seq 1 n-samples)
+            (lambda (i) (as.integer (readBin f :what "raw" :n (* n-rows n-cols) :endian "big"))))
+    (array . [n-samples n-rows n-cols])))
 
 ;; Create a dataset object
 (defparam mnist-dataset
@@ -26,7 +86,7 @@
 
 (defun get-data (subset trans :bs batch-size :shuffle FALSE)
   "Get the /subset/ of the cats vs dogs dataset"
-  (dataloader (dogs-vs-cats-dataset "data" :split subset :transform trans :token "token")
+  (dataloader (mnist-dataset "." subset)
               :batch_size bs
               :shuffle shuffle))
 
@@ -34,5 +94,4 @@
 ;; be accessed via `data$train` etc
 (defparam data
   {:train (get-data "train" transforms :shuffle TRUE)}
-  {:valid (get-data "valid" transforms)}
   {:test  (get-data "test"  transforms)})
