@@ -8,3 +8,4 @@ docs
 /tests/.slurp.history
 /tests/renv.lock
 /tests/renv/
+/tests/*.gz

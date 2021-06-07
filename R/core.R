@@ -25,11 +25,12 @@ progn <- function(args) {
 }
 
 defparam <- function(args) {
-  assignments <- preallocate(n = length(args) / 2)
+  assignments <- c()
   for (i in seq(1, length(args), 2)) {
-    assignments[[i]] <- paste(args[[i]], "<-", args[[i+1]])
+    assignments <- c(assignments, paste(args[[i]], "<-", args[[i+1]]))
   }
-  return(paste0(assignments, collapse = "\n"))
+  out <- paste0(assignments, collapse = "\n")
+  return(out)
 }
 
 lambda <- function(args) {
@@ -43,13 +44,13 @@ defun <- function(args) {
   has_docstring <- stringr::str_detect(args[[3]], "^\".*\"")
   if (has_docstring) {
     docstring <- stringr::str_remove_all(args[[3]], "\"")
-    body <- paste("#'", docstring, "\n", args[[4]])
+    body <- paste("#'", docstring, "\n", args[4:length(args)])
   } else {
-    body <- args[[3]]
+    body <- args[3:length(args)]
   }
   out <- paste(args[[1]], "<- function(", paste(args[[2]], collapse = ", "), ") {\n")
   body <- stringr::str_replace_all(body, "`", "expr")
-  out <- paste(out, body, "\n}")
+  out <- paste(out, paste0(body, collapse = "\n"), "\n}")
   out <- keywords_to_parameter(out)
   return(out)
 }
