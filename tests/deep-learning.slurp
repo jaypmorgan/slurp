@@ -5,16 +5,10 @@
 (library torchvision)
 (library torchdatasets)
 
-;; it would be nice to combine, such as:
-;; (const batch-size 64
-;;        device "cpu"
-;;        epochs 100
-;;        ...)
 (defparam batch-size 64)
-(defparam device
-  (if (cuda-is-available)
-      (torch-device "cuda")
-    "cpu"))
+          device (if (cuda-is-available)
+                     (torch-device "cuda")
+                   "cpu"))
 
 ;; Create a transformation function from the image to something the
 ;; neural network can use.

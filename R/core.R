@@ -9,6 +9,7 @@ getScriptPath <- function(){
 
 d <- getScriptPath()
 source(file.path(d, "R/functions.R"))
+source(file.path(d, "R/listprocessor.R"))
 
 
 keywords_to_parameter <- function(args) {
@@ -24,7 +25,11 @@ progn <- function(args) {
 }
 
 defparam <- function(args) {
-  paste(args[[1]], "<-", args[[2]])
+  assignments <- preallocate(n = length(args) / 2)
+  for (i in seq(1, length(args), 2)) {
+    assignments[[i]] <- paste(args[[i]], "<-", args[[i+1]])
+  }
+  return(paste0(assignments, collapse = "\n"))
 }
 
 lambda <- function(args) {
