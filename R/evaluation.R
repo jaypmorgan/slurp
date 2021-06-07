@@ -14,6 +14,7 @@ d <- getScriptPath()
 
 source(file.path(d, "R/listprocessor.R"))
 source(file.path(d, "R/functions.R"))
+source(file.path(d, "R/core.R"))
 
 ##' Evaluate the AST form
 ##'
@@ -59,14 +60,6 @@ evaluate_ast <- function(ast_list) {
     func <- stringr::str_replace_all(func, "->", "_to_")
     func <- stringr::str_replace_all(func, "(?<!<)-", "_")
     func <- stringr::str_replace_all(func, "\\?", "_p")
-  }
-
-  keywords_to_parameter <- function(args) {
-    clean_args <- list()
-    for (i in 1:length(args)) {
-      clean_args[[i]] <- stringr::str_replace_all(args[[i]], ":([\\w\\d_]+),", "\\1=")
-    }
-    return(clean_args)
   }
 
   builtin_keywords <- c("progn", "defparam", "lambda", "defun", "if", "when", "unless", "cond")

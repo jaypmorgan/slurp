@@ -1,0 +1,44 @@
+;; (install.packages ["tidyverse" "torch" "torchvision" "torchdatasets"])
+
+(library tidyverse)
+(library torch)
+(library torchvision)
+(library torchdatasets)
+
+;; it would be nice to combine, such as:
+;; (const batch-size 64
+;;        device "cpu"
+;;        epochs 100
+;;        ...)
+(defparam batch-size 64)
+(defparam device
+  (if (cuda-is-available)
+      (torch-device "cuda")
+    "cpu"))
+
+;; Create a transformation function from the image to something the
+;; neural network can use.
+(defun transforms (img :devi device)
+  (%>% ;; use magrittr as threading marco like feature :-)
+   (transform-to-tensor)
+   (.$to dev)))
+
+;; Create a dataset object
+(defparam mnist-dataset
+  (dataset :name "mnist_dataset"
+           :initialize (lambda (root subset) (defparam self$files (list.files (file.path root subset))))
+           :.getitem (lambda (i) {(nth self$files i) (nth self$files i)})
+           :.length (lambda () (length self$files))))
+
+(defun get-data (subset trans :bs batch-size :shuffle FALSE)
+  "Get the /subset/ of the cats vs dogs dataset"
+  (dataloader (dogs-vs-cats-dataset "data" :split subset :transform trans :token "token")
+              :batch_size bs
+              :shuffle shuffle))
+
+;; Load each subset of the data and store them in a single list. Can
+;; be accessed via `data$train` etc
+(defparam data
+  {:train (get-data "train" transforms :shuffle TRUE)}
+  {:valid (get-data "valid" transforms)}
+  {:test  (get-data "test"  transforms)})

@@ -10,6 +10,11 @@ getScriptPath <- function(){
 d <- getScriptPath()
 source(file.path(d, "R/functions.R"))
 
+
+keywords_to_parameter <- function(args) {
+  stringr::str_replace_all(args, ":([\\w\\d_]+),", "\\1=")
+}
+
 strip_comments <- function(input) {
   stringr::str_remove_all(input, ";;.*")
 }
@@ -24,7 +29,7 @@ defparam <- function(args) {
 
 lambda <- function(args) {
   paste0("function(",
-         paste(args[[1]], collapse = ", "), ") {\n",
+         keywords_to_parameter(paste(args[[1]], collapse = ", ")), ") {\n",
          paste(args[2:length(args)], collapse = "\n"),
          "\n}")
 }
@@ -40,6 +45,7 @@ defun <- function(args) {
   out <- paste(args[[1]], "<- function(", paste(args[[2]], collapse = ", "), ") {\n")
   body <- stringr::str_replace_all(body, "`", "expr")
   out <- paste(out, body, "\n}")
+  out <- keywords_to_parameter(out)
   return(out)
 }
 
