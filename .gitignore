@@ -9,3 +9,4 @@ docs
 /tests/renv.lock
 /tests/renv/
 /tests/*.gz
+/R/*.gz

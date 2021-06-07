@@ -56,7 +56,9 @@ evaluate_ast <- function(ast_list) {
   }
 
   standardise_name <- function(func) {
+    if (length(func) == 0) { return(func) }
     if (func == "<-") { return(func) }
+    if (grepl("\"", func)) { return(func) }
     func <- stringr::str_replace_all(func, "->", "_to_")
     func <- stringr::str_replace_all(func, "(?<!<)-", "_")
     func <- stringr::str_replace_all(func, "\\?", "_p")
@@ -122,12 +124,15 @@ evaluate_ast <- function(ast_list) {
   }
 
   var <- standardise_name(ast_list[[1]])
+  slurp_env <- rlang::env_parents()[[1]]
 
-  if (length(ast_list) > 1 || (ast_list[[1]] != "" && !(var %in% ls(rlang::env_parents()[[1]])))) {
+  if (length(ast_list) > 1
+      || (ast_list[[1]] != "" && !(var %in% ls(slurp_env)))
+      || sum(grepl(paste0("^", var), lsf.str(envir = slurp_env)))) {
     func <- run_evaluation(ast_list)
-    output <- eval(parse(text = func), envir = rlang::env_parents()[[1]])
+    output <- eval(parse(text = func), envir = slurp_env)
   } else {
-    output <- eval(parse(text = var), envir = rlang::env_parents()[[1]])
+    output <- eval(parse(text = var), envir = slurp_env)
   }
   return(output)
 }
