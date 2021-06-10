@@ -1,10 +1,6 @@
 library(base)
 library(rlang)
 
-source("R/listprocessor.R")
-source("R/functions.R")
-source("R/core.R")
-
 ##' Evaluate the AST form
 ##'
 ##' Using the result of ast(...), evaluate and compile

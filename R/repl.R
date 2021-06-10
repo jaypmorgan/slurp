@@ -1,7 +1,3 @@
-source("R/ast.R")
-source("R/evaluation.R")
-source("R/core.R")
-
 slurp_repl <- function() {
   prompt <- "SluRp> "
   history_file <- ".slurp.history"

@@ -1,5 +1,4 @@
 library(rlang)
-source("R/listprocessor.R")
 
 ##' Tokenise the user input
 ##'

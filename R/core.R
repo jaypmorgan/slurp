@@ -1,7 +1,3 @@
-source("R/functions.R")
-source("R/listprocessor.R")
-
-
 keywords_to_parameter <- function(args) {
   stringr::str_replace_all(args, ":([\\w\\d_]+),", "\\1=")
 }
