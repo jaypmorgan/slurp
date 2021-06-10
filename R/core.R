@@ -93,3 +93,19 @@ source_slurp <- function(source_code) {
     slurp_evaluate_ast(slurp_ast(statement))
   }
 }
+##' Interpret a string as SluRp
+##'
+##' @title SluRp
+##' @param source_code
+##' @return
+##' @author Jay Morgan
+##' @export
+slurp <- function(source_code, envir = rlang::caller_env()) {
+  source_code <- paste(source_code, collapse = "\n")
+  source_code <- strip_comments(source_code)
+  source_code <- stringi::stri_replace_all(source_code, regex = "\\s\\s\\s", " ")
+  source_code <- stringr::str_match_all(source_code, "(\\(.*\\))")[[1]][,1]
+  for (statement in source_code) {
+    print(slurp_evaluate_ast(slurp_ast(statement), envir = envir))
+  }
+}

@@ -10,7 +10,7 @@ library(rlang)
 ##' @return the compiled R expression
 ##' @author Jay Morgan
 ##' @export
-slurp_evaluate_ast <- function(ast_list) {
+slurp_evaluate_ast <- function(ast_list, envir = NULL) {
 
   is_infix <- function(fun) {
     infix_ops <- c("+", "-", "*", "/", "%%", "^", ">", "<", ">=", "<=", "==", "%>%")
@@ -109,7 +109,11 @@ slurp_evaluate_ast <- function(ast_list) {
   }
 
   var <- standardise_name(ast_list[[1]])
-  slurp_env <- rlang::env_parents()[[1]]
+  if (is.null(envir)) {
+    slurp_env <- rlang::env_parents()[[1]]
+  } else {
+    slurp_env <- envir
+  }
 
   if (length(ast_list) > 1
       || (ast_list[[1]] != "" && !(var %in% ls(slurp_env)))
