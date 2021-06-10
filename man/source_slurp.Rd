@@ -10,10 +10,10 @@ source_slurp(source_code)
 \item{source_code}{String representation of the source}
 }
 \description{
-.. content for \description{} (no empty lines) ..
+Import a SluRp script file
 }
 \details{
-.. content for \details{} ..
+Import a SluRp script file
 }
 \author{
 Jay Morgan

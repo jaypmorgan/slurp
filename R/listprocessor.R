@@ -7,8 +7,10 @@
 ##' @param lst the list to which the first element will be returned
 ##' @return the first element
 ##' @examples
+##' \dontrun{
 ##' (first {1 2 3}) => 1
 ##' (first {{1 2} {3 4}}) => list(1, 2)
+##' }
 ##' @author Jay Morgan
 ##' @export
 first <- function(lst) {
@@ -22,8 +24,10 @@ first <- function(lst) {
 ##' @param lst the list to get everything but the first index
 ##' @return the list excluding the first index
 ##' @examples
+##' \dontrun{
 ##' (rest {1 2 3 4}) => list(2, 3, 4)
 ##' (rest {{1 2} {3 4}}) => list(3, 4)
+##' }
 ##' @author Jay Morgan
 ##' @export
 rest <- function(lst) {
@@ -38,8 +42,10 @@ rest <- function(lst) {
 ##' @param n the index of the element to retrieve
 ##' @return the nth element
 ##' @examples
+##' \dontrun{
 ##' (nth {1 2 3} 1) => 1
 ##' (nth {{1 2} {3 4}} 2) => list(3, 4)
+##' }
 ##' @author Jay Morgan
 nth <- function(lst, n) {
   return(lst[[n]])
@@ -54,9 +60,11 @@ nth <- function(lst, n) {
 ##' @param end the end index (default: length of list)
 ##' @return all elements within the specified range
 ##' @examples
+##' \dontrun{
 ##' (cut {1 2 3 4} 1 2) => list(1, 2)
 ##' (cut {1 2 3 4} :start 2) => list(2, 3, 4)
 ##' (cut {1 2 3 4} :end 3) => list(1, 2, 3)
+##' }
 ##' @author Jay Morgan
 cut <- function(lst, start = NULL, end = NULL) {
   if (is.null(start)) {

@@ -156,7 +156,7 @@ slurp_ast <- function(input) {
 display_ast <- function(ast_list, depth = 0) {
   for (item in ast_list) {
     if (typeof(item) == "list") {
-      display.ast(item, depth = depth + 1)
+      display_ast(item, depth = depth + 1)
     } else {
       indentation <- paste(replicate("--", n = depth), collapse = "")
       print(paste(indentation, item, collapse = ""))

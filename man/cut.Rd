@@ -23,9 +23,11 @@ Cut or slice a list data type from start index to end index
 Retrieve elements from start index to end index. If start is not supplied, it will be assumed to be the 1st index. If end is not supplied then, all elements up to the end will be returned.
 }
 \examples{
+\dontrun{
 (cut {1 2 3 4} 1 2) => list(1, 2)
 (cut {1 2 3 4} :start 2) => list(2, 3, 4)
 (cut {1 2 3 4} :end 3) => list(1, 2, 3)
+}
 }
 \author{
 Jay Morgan

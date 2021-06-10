@@ -19,8 +19,10 @@ Retrieve the rest of a list
 Retrieve the rest of the elements from a list type data structure.
 }
 \examples{
+\dontrun{
 (rest {1 2 3 4}) => list(2, 3, 4)
 (rest {{1 2} {3 4}}) => list(3, 4)
+}
 }
 \author{
 Jay Morgan

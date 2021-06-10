@@ -21,8 +21,10 @@ style function uses indexing under the hood but exposes the
 process as a function call.
 }
 \examples{
+\dontrun{
 (first {1 2 3}) => 1
 (first {{1 2} {3 4}}) => list(1, 2)
+}
 }
 \author{
 Jay Morgan

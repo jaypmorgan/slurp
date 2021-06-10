@@ -79,9 +79,9 @@ cond_c <- function(args) {
   return(args)
 }
 
-##' .. content for \description{} (no empty lines) ..
+##' Import a SluRp script file
 ##'
-##' .. content for \details{} ..
+##' Import a SluRp script file
 ##' @title source_slurp
 ##' @param source_code String representation of the source
 ##' @return NULL
@@ -94,6 +94,6 @@ source_slurp <- function(source_code) {
   source_code <- stringi::stri_replace_all(source_code, regex = "\\s\\s\\s", " ")
   source_code <- stringr::str_match_all(source_code, "(\\(.*\\))")[[1]][,1]
   for (statement in source_code) {
-    slurp_evaluate_ast(ast(statement))
+    slurp_evaluate_ast(slurp_ast(statement))
   }
 }

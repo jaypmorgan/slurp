@@ -10,7 +10,7 @@ not(bool)
 \item{bool}{The bool to invert \code{TRUE/FALSE}}
 }
 \value{
-
+Inverse bool of input
 }
 \description{
 invert a bool value, i.e. TRUE => FALSE, FALSE => TRUE
@@ -21,9 +21,11 @@ Instead of the traditional inversion of boolean values using
 This can be applied to boolean functions as a simple function call.
 }
 \examples{
+\dontrun{
 (not TRUE)
 (not FALSE)
 (not (== 1 1))
+}
 }
 \author{
 Jay Morgan

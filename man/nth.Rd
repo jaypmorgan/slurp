@@ -21,8 +21,10 @@ Return the nth element from a list
 Retrieve the nth element of the list via a function call instead of indexing
 }
 \examples{
+\dontrun{
 (nth {1 2 3} 1) => 1
 (nth {{1 2} {3 4}} 2) => list(3, 4)
+}
 }
 \author{
 Jay Morgan

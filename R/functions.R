@@ -39,12 +39,14 @@ or <- function(...) {
 ##' This can be applied to boolean functions as a simple function call.
 ##' @title not
 ##' @param bool The bool to invert `TRUE/FALSE`
-##' @return
+##' @return Inverse bool of input
 ##' @author Jay Morgan
 ##' @examples
+##' \dontrun{
 ##' (not TRUE)
 ##' (not FALSE)
 ##' (not (== 1 1))
+##' }
 ##' @export
 not <- function(bool) {
   return(!(bool))

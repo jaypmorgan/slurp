@@ -101,7 +101,7 @@ slurp_evaluate_ast <- function(ast_list) {
 
     for (item in args) {
       # TODO: there should be a better way of saying this list is referencing a function call
-      if (is_list(item) && (item[[1]] != "TRUE" && item[[1]] != "FALSE")) {
+      if (rlang::is_list(item) && (item[[1]] != "TRUE" && item[[1]] != "FALSE")) {
         evaluated_args[[counter <- counter + 1]] <- run_evaluation(item)
       } else {
         evaluated_args[[counter <- counter + 1]] <- item
@@ -117,7 +117,7 @@ slurp_evaluate_ast <- function(ast_list) {
 
   if (length(ast_list) > 1
       || (ast_list[[1]] != "" && !(var %in% ls(slurp_env)))
-      || sum(grepl(paste0("^", var), lsf.str(envir = slurp_env)))) {
+      || sum(grepl(paste0("^", var), utils::lsf.str(envir = slurp_env)))) {
     func <- run_evaluation(ast_list)
     output <- eval(parse(text = func), envir = slurp_env)
   } else {
