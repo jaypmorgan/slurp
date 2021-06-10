@@ -19,21 +19,15 @@ if (file.exists(".Rprofile")) {
 
 d <- getScriptPath()
 
-source(file.path(d, "/R/repl.R"))
+source(file.path(d, "R/repl.R"))
 source(file.path(d, "R/ast.R"))
 source(file.path(d, "R/evaluation.R"))
 source(file.path(d, "R/core.R"))
 
 if (length(args) == 0) {
   # repl mode
-  repl()
+  slurp_repl()
 } else {
   # source code mode
-  source_code <- paste(readLines(args[[1]]), collapse = "\n")
-  source_code <- strip_comments(source_code)
-  source_code <- stringi::stri_replace_all(source_code, regex = "\\s\\s\\s", " ")
-  source_code <- stringr::str_match_all(source_code, "(\\(.*\\))")[[1]][,1]
-  for (statement in source_code) {
-    evaluate_ast(ast(statement))
-  }
+  source_slurp(args[[1]])
 }

@@ -39,6 +39,22 @@
 ;; ----------------------------------------------------------------------
 ;; Download and prepare the datasets for the model
 
+(defun type->filename (type label?)
+  "Transform a subset name to the filename representation"
+  (defun end-fn (label?)
+    (if (== label? TRUE)
+        "labels-idx1-ubyte"
+      "images-idx3-ubyte"))
+  ;; need returns here as R is not returning the last call but the
+  ;; last statement. If we don't then == type "train will return NULL
+  ;; as its not the last statement in the function
+
+  ;; I will need to change this to case or make cond to include implicit
+  ;; return statements. I think the latter is better perhaps in a nested
+  ;; function call?.
+  (cond ((== type "train") (return (paste0 "train" "-" (end-fn label?))))
+        ((== type "test") (return (paste0 "t10k" "-" (end-fn label?))))))
+
 (defun prepare-data ()
   "Uncompress the datasets"
   (defparam files (Sys.glob "*.gz"))
@@ -46,14 +62,10 @@
 
 (defun download-data (subset)
   "download the mnist images and labels for subset = train or test"
-  (unless (== subset "train")
-    (defparam subset "t10k"))
   (defparam base-name "http://yann.lecun.com/exdb/mnist/"
-            label-name "labels-idx1-ubyte.gz"
-            image-name "images-idx3-ubyte.gz"
             request "curl -O ")
-  (system (paste0 request base-name subset "-" image-name))
-  (system (paste0 request base-name subset "-" label-name)))
+  (system (paste0 request base-name (type->filename subset :label? FALSE)))
+  (system (paste0 request base-name (type->filename subset :label? TRUE)))
 
 (defun download-all-data ()
   "Get and uncompress all data"
@@ -61,7 +73,7 @@
   (download-data "test")
   (prepare-data))
 
-(defun read-mnist (filepath)
+(defun read-mnist-images (type)
   "Load an mnist data from IDX format"
   (defparam f (file filepath "rb")
     ;; read the first 4 values in file that correspond to:
@@ -80,9 +92,10 @@
 ;; Create a dataset object
 (defparam mnist-dataset
   (dataset :name "mnist_dataset"
-           :initialize (lambda (root subset) (defparam self$files (list.files (file.path root subset))))
-           :.getitem (lambda (i) {(nth self$files i) (nth self$files i)})
-           :.length (lambda () (length self$files))))
+            :initialize (lambda (root subset)
+                          (unless (file.exists "t10k-labels-idx1-ubyte")
+                            (download-all-data))
+                          (defparam self$data
 
 (defun get-data (subset trans :bs batch-size :shuffle FALSE)
   "Get the /subset/ of the cats vs dogs dataset"

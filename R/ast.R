@@ -1,27 +1,16 @@
-getScriptPath <- function(){
-    cmd.args <- commandArgs()
-    m <- regexpr("(?<=^--file=).+", cmd.args, perl=TRUE)
-    script.dir <- dirname(regmatches(cmd.args, m))
-    if(length(script.dir) == 0) stop("can't determine script dir: please call the script with Rscript")
-    if(length(script.dir) > 1) stop("can't determine script dir: more than one '--file' argument detected")
-    return(script.dir)
-}
-
-d <- getScriptPath()
-
 library(rlang)
-source(file.path(d, "R/listprocessor.R"))
+source("R/listprocessor.R")
 
 ##' Tokenise the user input
 ##'
 ##' From the lisp syntax, tokenise and provide a AST representation using
 ##' list of lists.
-##' @title ast
+##' @title slurp_ast
 ##' @param input as a lisp-style string
 ##' @return List of lists for each token
 ##' @author Jay Morgan
 ##' @export
-ast <- function(input) {
+slurp_ast <- function(input) {
 
   filter_comments <- function(input) {
     stringr::str_remove_all(input, "(;;.*$)")

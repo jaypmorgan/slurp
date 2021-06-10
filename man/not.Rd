@@ -2,7 +2,7 @@
 % Please edit documentation in R/functions.R
 \name{not}
 \alias{not}
-\title{}
+\title{not}
 \usage{
 not(bool)
 }

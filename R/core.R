@@ -1,15 +1,5 @@
-getScriptPath <- function(){
-    cmd.args <- commandArgs()
-    m <- regexpr("(?<=^--file=).+", cmd.args, perl=TRUE)
-    script.dir <- dirname(regmatches(cmd.args, m))
-    if(length(script.dir) == 0) stop("can't determine script dir: please call the script with Rscript")
-    if(length(script.dir) > 1) stop("can't determine script dir: more than one '--file' argument detected")
-    return(script.dir)
-}
-
-d <- getScriptPath()
-source(file.path(d, "R/functions.R"))
-source(file.path(d, "R/listprocessor.R"))
+source("R/functions.R")
+source("R/listprocessor.R")
 
 
 keywords_to_parameter <- function(args) {
@@ -82,6 +72,28 @@ unless_c <- function(args) {
 }
 
 cond_c <- function(args) {
+  if (typeof(args) == "list") {
+    return(paste0(args, collapse = "\n"))
+  }
   ## already compiled just return
   return(args)
+}
+
+##' .. content for \description{} (no empty lines) ..
+##'
+##' .. content for \details{} ..
+##' @title source_slurp
+##' @param source_code String representation of the source
+##' @return NULL
+##' @author Jay Morgan
+##' @export
+source_slurp <- function(source_code) {
+  source_code <- readLines(source_code)
+  source_code <- paste(source_code, collapse = "\n")
+  source_code <- strip_comments(source_code)
+  source_code <- stringi::stri_replace_all(source_code, regex = "\\s\\s\\s", " ")
+  source_code <- stringr::str_match_all(source_code, "(\\(.*\\))")[[1]][,1]
+  for (statement in source_code) {
+    slurp_evaluate_ast(ast(statement))
+  }
 }
