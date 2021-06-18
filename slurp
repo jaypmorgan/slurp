@@ -25,6 +25,7 @@ source(file.path(d, "R/evaluation.R"))
 source(file.path(d, "R/core.R"))
 source(file.path(d, "R/functions.R"))
 source(file.path(d, "R/listprocessor.R"))
+source(file.path(d, "R/types.R"))
 
 if (length(args) == 0) {
   # repl mode

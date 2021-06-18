@@ -112,6 +112,11 @@ slurp <- function(source_code, envir = rlang::caller_env()) {
 
 getin <- function(args) {
   arr <- args[[1]]
+
+  if (is(eval(parse(text=arr)), "NamedMatrix")) {
+    return(paste0("getin.namedmatrix(", arr, ", ", args[[2]], ")"))
+  }
+
   out <- c(arr, "[")
   for (i in 2:length(args)) {
     idx <- args[[i]]
