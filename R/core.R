@@ -109,3 +109,15 @@ slurp <- function(source_code, envir = rlang::caller_env()) {
     print(slurp_evaluate_ast(slurp_ast(statement), envir = envir))
   }
 }
+
+getin <- function(args) {
+  arr <- args[[1]]
+  out <- c(arr, "[")
+  for (i in 2:length(args)) {
+    idx <- args[[i]]
+    if (idx == ":") idx <- ","
+    out <- c(out, idx)
+  }
+  out <- c(out, "]")
+  return(paste0(out, collapse = ""))
+}

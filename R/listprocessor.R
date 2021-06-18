@@ -47,6 +47,7 @@ rest <- function(lst) {
 ##' (nth {{1 2} {3 4}} 2) => list(3, 4)
 ##' }
 ##' @author Jay Morgan
+##' @export
 nth <- function(lst, n) {
   return(lst[[n]])
 }
@@ -66,6 +67,7 @@ nth <- function(lst, n) {
 ##' (cut {1 2 3 4} :end 3) => list(1, 2, 3)
 ##' }
 ##' @author Jay Morgan
+##' @export
 cut <- function(lst, start = NULL, end = NULL) {
   if (is.null(start)) {
     start <- 1

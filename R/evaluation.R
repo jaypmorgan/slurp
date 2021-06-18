@@ -49,8 +49,8 @@ slurp_evaluate_ast <- function(ast_list, envir = NULL) {
     func <- stringr::str_replace_all(func, "\\?", "_p")
   }
 
-  builtin_keywords <- c("progn", "defparam", "lambda", "defun", "if", "when", "unless", "cond")
-  builtin_mappings <- c(progn, defparam, lambda, defun, if_c, when_c, unless_c, cond_c)
+  builtin_keywords <- c("progn", "defparam", "lambda", "defun", "if", "when", "unless", "cond", "getin")
+  builtin_mappings <- c(progn, defparam, lambda, defun, if_c, when_c, unless_c, cond_c, getin)
 
   compile_function <- function(func, passed_args) {
     func <- standardise_name(func)
@@ -119,6 +119,7 @@ slurp_evaluate_ast <- function(ast_list, envir = NULL) {
       || (ast_list[[1]] != "" && !(var %in% ls(slurp_env)))
       || sum(grepl(paste0("^", var), utils::lsf.str(envir = slurp_env)))) {
     func <- run_evaluation(ast_list)
+    print(func)
     output <- eval(parse(text = func), envir = slurp_env)
   } else {
     output <- eval(parse(text = var), envir = slurp_env)

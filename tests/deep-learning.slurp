@@ -39,7 +39,7 @@
 ;; ----------------------------------------------------------------------
 ;; Download and prepare the datasets for the model
 
-(defun type->filename (type label?)
+(defun type->filename (subset :label? FALSE)
   "Transform a subset name to the filename representation"
   (defun end-fn (label?)
     (if (== label? TRUE)
@@ -52,8 +52,8 @@
   ;; I will need to change this to case or make cond to include implicit
   ;; return statements. I think the latter is better perhaps in a nested
   ;; function call?.
-  (cond ((== type "train") (return (paste0 "train" "-" (end-fn label?))))
-        ((== type "test") (return (paste0 "t10k" "-" (end-fn label?))))))
+  (cond ((== subset "train") (return (paste0 "train" "-" (end-fn label?))))
+        ((== subset "test") (return (paste0 "t10k" "-" (end-fn label?))))))
 
 (defun prepare-data ()
   "Uncompress the datasets"
@@ -65,7 +65,7 @@
   (defparam base-name "http://yann.lecun.com/exdb/mnist/"
             request "curl -O ")
   (system (paste0 request base-name (type->filename subset :label? FALSE)))
-  (system (paste0 request base-name (type->filename subset :label? TRUE)))
+  (system (paste0 request base-name (type->filename subset :label? TRUE))))
 
 (defun download-all-data ()
   "Get and uncompress all data"
@@ -73,9 +73,9 @@
   (download-data "test")
   (prepare-data))
 
-(defun read-mnist-images (type)
+(defun read-mnist-images (subset)
   "Load an mnist data from IDX format"
-  (defparam f (file filepath "rb")
+  (defparam f (file (type->filename subset) "rb")
     ;; read the first 4 values in file that correspond to:
     ;; magicnumber, number of digits, dims of x, dims of y
     file-params (readBin f (integer) :n 4 :endian "big")
@@ -92,14 +92,14 @@
 ;; Create a dataset object
 (defparam mnist-dataset
   (dataset :name "mnist_dataset"
-            :initialize (lambda (root subset)
-                          (unless (file.exists "t10k-labels-idx1-ubyte")
-                            (download-all-data))
-                          (defparam self$data
+            :initialize (lambda (subset)
+                          ;;(unless (file.exists (type->filename subset :label TRUE))
+                          ;;  (download-all-data))
+                          (defparam self$data (read-mnist-images subset)))))
 
 (defun get-data (subset trans :bs batch-size :shuffle FALSE)
   "Get the /subset/ of the cats vs dogs dataset"
-  (dataloader (mnist-dataset "." subset)
+  (dataloader (mnist-dataset subset)
               :batch_size bs
               :shuffle shuffle))
 

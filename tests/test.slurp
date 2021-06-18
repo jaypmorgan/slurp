@@ -56,26 +56,18 @@
 
 (+ 1 2 3 4 5)
 
-;; Language lasagnes
-(defparam np (import "numpy"))
-(defparam torch (import "torch"))
-(defparam nn (import "torch.nn"))
+(defparam x (make-array (rnorm 100) {:x 50 :y 2 :z 1}))
+(defparam x (make-array (rnorm 100) {50 2 1}))
+(defparam x (make-array (rnorm 100) [50 2 1]))
 
-(defparam model
-  (nn$Sequential (nn$Linear :in_features 4L :out_features 10L)
-                 (nn$ReLU)
-                 (nn$Linear :in_features 10L :out_features 3L)
-                 (nn$Softmax)))
-(print model)
+(getin x {:x [1 2]})
+(getin x {:y [5 2]})
+(getin x {1:10 NULL})
+(getin x {NULL 1})
+(getin x [1 2])
+(getin x 1)
 
-(defun create-data ()
-  (torch$FloatTensor (np$array (as.matrix (select iris
-                                             [Sepal.Width, Sepal.Length, Petal.Width, Petal.Length])))))
+(getin x (seq 1 10))
 
-(defparam data (create-data))
-
-(print input-data)
-
-(defparam preds (model data))
-
-(print preds)
+(setin x {:x [5 10]} 5)
+(setin y {:y 2} 2)
