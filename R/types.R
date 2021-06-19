@@ -9,8 +9,8 @@ NamedMatrix <- R6Class("NamedMatrix", list(
     self$dims <- length(dim(self$data))
     self$names <- names(dims)
   },
-  print = function() { self$data },
-  getdim = function(idx) {
+  print = function() { print(self$data) },
+  getdim = function(idx, do_eval = TRUE) {
     calls <- c("[")
     if (typeof(idx) == "list") {
       indexes <- vector(mode = "list", length = self$dims)
@@ -25,12 +25,30 @@ NamedMatrix <- R6Class("NamedMatrix", list(
         }
       }
       indexes <- paste(indexes, collapse = ", ")
-      return(eval(parse(text = paste0("self$data[", indexes, "]"))))
+      t <- paste0("self$data[", indexes, "]")
+      if (do_eval) {
+        return(eval(parse(text = t)))
+      } else {
+        return(t)
+      }
     } else {
-      return(self$data[idx])
+      if (do_eval) {
+        return(self$data[idx])
+      } else {
+        return(paste0("self$data[", idx, "]"))
+      }
     }
+  },
+  set = function(idx, val) {
+    arr <- self$getdim(idx, do_eval = FALSE)
+    ass <- paste0(arr, " <- ", val)
+    return(eval(parse(text=ass)))
+  },
+  get = function(idx) {
+    return(self$getdim(idx))
   })
 )
 
 make_array <- function(dims, data) NamedMatrix$new(dims, data)
-getin.namedmatrix <- function(x, idx) x$getdim(idx)
+getin.namedmatrix <- function(x, idx) x$get(idx)
+setin.namedmatrix <- function(x, idx, val) x$set(idx, val)

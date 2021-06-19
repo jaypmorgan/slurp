@@ -56,18 +56,16 @@
 
 (+ 1 2 3 4 5)
 
-(defparam x (make-array (rnorm 100) {:x 50 :y 2 :z 1}))
-(defparam x (make-array (rnorm 100) {50 2 1}))
-(defparam x (make-array (rnorm 100) [50 2 1]))
+(defparam x (make-array {:x 50 :y 2 :z 1} (rnorm 100)))
+(defparam y (make-array {:x 50 :y 2} (rnorm 100)))
+(defparam z (make-array [50 2 1] (rnorm 100)))
 
 (getin x {:x [1 2]})
-(getin x {:y [5 2]})
-(getin x {1:10 NULL})
-(getin x {NULL 1})
+(getin x {:y [2 1]})
 (getin x [1 2])
 (getin x 1)
-
 (getin x (seq 1 10))
 
+(setin x 1 5)
 (setin x {:x [5 10]} 5)
 (setin y {:y 2} 2)

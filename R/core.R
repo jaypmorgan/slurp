@@ -126,3 +126,20 @@ getin <- function(args) {
   out <- c(out, "]")
   return(paste0(out, collapse = ""))
 }
+
+setin <- function(args) {
+  arr <- args[[1]]
+
+  if (is(eval(parse(text=arr)), "NamedMatrix")) {
+    return(paste0("setin.namedmatrix(", arr, ", ", args[[2]], ", ", args[[3]], ")"))
+  }
+
+  out <- c(arr, "[")
+  for (i in 2:length(args)) {
+    idx <- args[[i]]
+    if (idx == ":") idx <- ","
+    out <- c(out, idx)
+  }
+  out <- c(out, "] <- ", args[[3]])
+  return(paste0(out, collapse = ""))
+}
